@@ -5,6 +5,8 @@ require('./vendor/jquery');
 require('./vendor/handlebars');
 require('./vendor/ember');
 require('./vendor/ember-data');
+require('./vendor/ember-validations');
+require('./vendor/ember-easyform');
 require('./templates');
 
 var App = window.App = require('./app');
