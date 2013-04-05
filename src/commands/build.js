@@ -24,7 +24,7 @@ module.exports = function(program) {
   precompile(rootify('templates'), rootify('templates.js'), function() {
     createIndex().then(build);
   });
-  
+
   if(isWatch) watch();
 };
 
@@ -75,9 +75,7 @@ function cleanup() {
 
 function watch() {
   findit.find(root, function (file) {
-    if(file == rootify('index.js') || file == rootify('templates.js') || file == rootify('javascripts/application.js')){
-      // message.notify("-> Ignoring: index.js application.js and templates.js");
-    } else {
+    if(file != rootify('index.js') && file != rootify('templates.js') && file != rootify('javascripts/application.js')){
       fs.watchFile(file, { persistent: true, interval: 100 }, function (curr, prev) {
         if (curr.mtime > prev.mtime) {
           message.notify("-> Build: generate application.js");
