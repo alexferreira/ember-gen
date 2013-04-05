@@ -24,6 +24,7 @@ module.exports = function(program) {
   precompile(rootify('templates'), rootify('templates.js'), function() {
     createIndex().then(build);
   });
+  
   if(isWatch) watch();
 };
 
@@ -68,8 +69,8 @@ function build() {
 }
 
 function cleanup() {
-  // fs.unlink(rootify('index.js'));
-  // fs.unlink(rootify('templates.js'));
+  fs.unlink(rootify('index.js'));
+  fs.unlink(rootify('templates.js'));
 }
 
 function watch() {
