@@ -7,7 +7,7 @@ var message = require('./message');
 var config = require('./config');
 
 var read = exports.read = function(name) {
-  var path = __dirname + '/../templates/' + name + '.handlebars';
+  var path = __dirname + '/../templates/' + name + '.hbs';
   return fs.readFileSync(path).toString();
 };
 
@@ -32,7 +32,7 @@ function writeFile(srcPath, savePath, locals) {
 
 var generate = exports.generate = function(type, resourceName, locals) {
   var root = config().appDir;
-  var ext = type == 'template' ? '.handlebars' : '.js';
+  var ext = type == 'template' ? '.hbs' : '.js';
   name = 'generate/' + type + ext;
   path = root + '/' + inflector.pluralize(type) + '/' + resourceName + ext;
   return write(name, path, locals, true);

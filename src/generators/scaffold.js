@@ -102,8 +102,8 @@ function createTemplates(resource, fields) {
   var modelName = inflector.underscore(inflector.singularize(resource));
   var saveDir = root + '/templates/';
   var edit = template.write(
-    'scaffold/templates/edit_resource.handlebars',
-    saveDir + 'edit_' + resource + '.handlebars',
+    'scaffold/templates/edit_resource.hbs',
+    saveDir + 'edit_' + resource + '.hbs',
     {
       title: inflector.humanize(resource),
       fields: fields
@@ -112,8 +112,8 @@ function createTemplates(resource, fields) {
   );
   var title = inflector.humanize(resource);
   var resourceTemplate = template.write(
-    'scaffold/templates/resource.handlebars',
-    saveDir + resource + '.handlebars',
+    'scaffold/templates/resource.hbs',
+    saveDir + resource + '.hbs',
     {
       title: title,
       fields: fields,
@@ -124,8 +124,8 @@ function createTemplates(resource, fields) {
     true
   );
   var resources = template.write(
-    'scaffold/templates/resources.handlebars',
-    saveDir + inflector.pluralize(resource) + '.handlebars',
+    'scaffold/templates/resources.hbs',
+    saveDir + inflector.pluralize(resource) + '.hbs',
     {
       title: inflector.pluralize(inflector.humanize(resource)),
       modelTitle: inflector.humanize(modelName),

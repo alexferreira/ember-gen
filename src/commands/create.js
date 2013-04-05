@@ -13,8 +13,8 @@ var files = [
   'app.js',
   'store.js',
   'routes.js',
-  'templates/application.handlebars',
-  'templates/index.handlebars'
+  'templates/application.hbs',
+  'templates/index.hbs'
 ];
 
 module.exports = function(program) {
