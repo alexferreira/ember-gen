@@ -3,6 +3,7 @@
 
 require('./vendor/jquery');
 require('./vendor/handlebars');
+require('./vendor/underscore');
 require('./vendor/ember');
 require('./vendor/ember-data');
 require('./vendor/ember-validations');
