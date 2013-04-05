@@ -69,8 +69,8 @@ function build() {
 }
 
 function cleanup() {
-  fs.unlink(rootify('index.js'));
-  fs.unlink(rootify('templates.js'));
+  // fs.unlink(rootify('index.js'));
+  // fs.unlink(rootify('templates.js'));
 }
 
 function watch() {
