@@ -10,6 +10,7 @@ var inflector = require('../util/inflector');
 var walk = require('walk').walkSync;
 var precompile = require('../util/precompile');
 var parseBuildCommand = require('../util/parseBuildCommand');
+var findit = require('findit');
 var root;
 
 module.exports = function(program) {
@@ -18,10 +19,12 @@ module.exports = function(program) {
   env = parseBuildCommand([].slice.call(arguments, 0));
 
   isMinify = env['args'][0].minify
+  isWatch = env['args'][0].watch
 
   precompile(rootify('templates'), rootify('templates.js'), function() {
     createIndex().then(build);
   });
+  if(isWatch) watch();
 };
 
 function createIndex() {
@@ -55,7 +58,6 @@ function build() {
   var command = __dirname + '/../../node_modules/browserbuild/bin/browserbuild ' +
                 "-m index -b " + root + "/ `find "+ root + " -name '*.js'` > " +
                 rootify('javascripts/application.js');
-                
   exec(command, function (error, stdout, stderr) {
     if(stdout) console.log(stdout);
     if(stderr) console.log(stderr);
@@ -80,7 +82,27 @@ function build() {
 function cleanup() {
   // fs.unlink(rootify('index.js'));
   // fs.unlink(rootify('templates.js'));
+  return true;
 }
+
+function watch() {
+  findit.find(root, function (file) {
+    // if(file != rootify('javascripts/application.js') || file != rootify('index.js') || file != rootify('templates.js')){
+    if(file == rootify('index.js') || file == rootify('templates.js') || file == rootify('javascripts/application.js')){
+      // message.notify("-> Ignoring: index.js application.js and templates.js");
+    } else {
+      fs.watchFile(file, { persistent: true, interval: 100 }, function (curr, prev) {
+        // if (curr.mtime.getTime() > prev.mtime.getTime()) {
+        if (curr.mtime > prev.mtime) {
+          message.notify("-> Build: generate application.js");
+          build();
+        }
+      });
+    }
+  });
+}
+
+
 
 function rootify(path) {
   return root + '/' + path;

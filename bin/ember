@@ -21,6 +21,7 @@ program
   .usage(' ')
   .action(function() { build(program); })
   .option('-m, --minify',    'generates a application.min.js')
+  .option('-w, --watch',    'watch files change')
 
 program
   .command('generate')
