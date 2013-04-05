@@ -62,19 +62,7 @@ function build() {
     if(stdout) console.log(stdout);
     if(stderr) console.log(stderr);
     if (error) throw new Error(error);
-
-    if(isMinify){
-      message.notify("-> Minify: remove and create application.min.js");
-      message.removeFile("javascripts/application.min.js");
-      fs.unlink(rootify('javascripts/application.min.js'), function (error) {
-        // if (error) throw error;
-        minify = UglifyJS.minify(rootify('javascripts/application.js')).code;
-        fs.writeFile(rootify('javascripts/application.min.js'), minify, function (error) {
-          if (error) throw new Error(error);
-          message.fileCreated("javascripts/application.js");
-        });
-      });
-    }
+    if(isMinify) minify();
     cleanup();
   });
 }
@@ -82,17 +70,14 @@ function build() {
 function cleanup() {
   // fs.unlink(rootify('index.js'));
   // fs.unlink(rootify('templates.js'));
-  return true;
 }
 
 function watch() {
   findit.find(root, function (file) {
-    // if(file != rootify('javascripts/application.js') || file != rootify('index.js') || file != rootify('templates.js')){
     if(file == rootify('index.js') || file == rootify('templates.js') || file == rootify('javascripts/application.js')){
       // message.notify("-> Ignoring: index.js application.js and templates.js");
     } else {
       fs.watchFile(file, { persistent: true, interval: 100 }, function (curr, prev) {
-        // if (curr.mtime.getTime() > prev.mtime.getTime()) {
         if (curr.mtime > prev.mtime) {
           message.notify("-> Build: generate application.js");
           build();
@@ -102,6 +87,18 @@ function watch() {
   });
 }
 
+function minify() {
+  message.notify("-> Minify: remove and create application.min.js");
+  message.removeFile("javascripts/application.min.js");
+  fs.unlink(rootify('javascripts/application.min.js'), function (error) {
+    // if (error) throw error;
+    minify = UglifyJS.minify(rootify('javascripts/application.js')).code;
+    fs.writeFile(rootify('javascripts/application.min.js'), minify, function (error) {
+      if (error) throw new Error(error);
+      message.fileCreated("javascripts/application.js");
+    });
+  });
+}
 
 
 function rootify(path) {
