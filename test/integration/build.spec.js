@@ -6,7 +6,7 @@ var helpers = require("../support/helpers");
 function create(done) {
   exec("./bin/ember create test-app", function(err) {
     if (err) throw new Error(err);
-    fs.exists('.ember', function(exists) {
+    fs.exists('test-app/.ember', function(exists) {
       exists.should.equal(true);
       done();
     });
@@ -15,12 +15,12 @@ function create(done) {
 
 function cleanup(done) {
   rm("./test-app", function() {
-    fs.unlink('.ember', done);
+    done();
   });
 }
 
 function build(done) {
-  exec("./bin/ember build", function(err) {
+  exec("cd test-app; ../bin/ember build", function(err) {
     if (err) throw new Error(err);
     done();
   });

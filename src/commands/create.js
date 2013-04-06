@@ -105,8 +105,9 @@ function copyStylesheet(name) {
 }
 
 function makeEmberFile() {
-  return template.write('create/ember', '.ember', {
-    appDir: root,
+  var ember = rootify('.ember');
+  return template.write('create/ember', ember, {
+    appDir: '.',
     modules: 'cjs'
   });
 }

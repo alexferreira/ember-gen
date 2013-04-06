@@ -7,14 +7,15 @@ describe("create", function() {
 
   afterEach(function(done) {
     rm("./test-app", function() {
-      fs.unlink('.ember', done);
+      // fs.unlink('test-app/.ember', done);
+      done();
     });
   });
 
   it("should add a bunch of files and directories", function(done) {
     exec("./bin/ember create test-app", function() {
       helpers.assertPathsExist([
-        ".ember",
+        "test-app/.ember",
         "test-app/controllers",
         "test-app/models",
         "test-app/routes",

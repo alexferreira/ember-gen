@@ -9,7 +9,8 @@ var helpers = require("../support/helpers");
 
 function createTestApp(done) {
   exec("./bin/ember create test-app", function() {
-    fs.exists('.ember', function(exists) {
+    fs.exists('test-app/.ember', function(exists) {
+      console.log(exists)
       exists.should.equal(true);
       done();
     });
@@ -17,12 +18,13 @@ function createTestApp(done) {
 }
 function removeTestApp(done) {
   rm("./test-app", function() {
-    fs.unlink('.ember', done);
+    // fs.unlink('.ember', done);
+    done();
   });
 }
 
 function call(opts, done) {
-  exec("./bin/ember generate " + opts, function(err) {
+  exec("cd test-app; ../bin/ember generate " + opts, function(err) {
     if (err) throw new Error(err);
     done();
   });
