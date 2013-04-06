@@ -22,7 +22,7 @@
     "rimraf": "*"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha --require should --reporter dot --ui bdd --growl $(find test -name \"*.spec.js\")"
+    "test": "node_modules/.bin/mocha --require should --reporter spec --ui bdd --growl $(find test -name \"*.spec.js\")"
   },
   "engines": {
     "node": ">=0.8.16"
