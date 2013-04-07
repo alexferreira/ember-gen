@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 var program = require('commander');
-var create = require('../src/commands/create');
+var project = require('../src/commands/project');
 var build = require('../src/commands/build');
 var generate = require('../src/commands/generate');
 //var message = require('../src/util/message');
@@ -10,10 +10,10 @@ program
   .usage("[command] [options]\n\n  Command-Specific Help\n\n    ember [command] --help");
 
 program
-  .command('create')
+  .command('project')
   .description('creates a new ember application')
   .usage('[dir]')
-  .action(function() { create(program); });
+  .action(function() { project(program); });
 
 program
   .command('build')
@@ -36,7 +36,8 @@ program
   .option('-r, --route [name]',             'generates a route')
   .option('-s, --scaffold [name] [fields]', 'scaffolds full CRUD for a model')
   .option('-t, --template [name]',          'generates a handlebars template')
-  .option('-v, --view [name]',              'generates a view');
+  .option('-v, --view [name]',              'generates a view')
+  .option('-p, --project [name]',              'generates a project');
 
 program
   .command('precompile')
