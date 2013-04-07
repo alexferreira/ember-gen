@@ -3,17 +3,16 @@ var fs = require("fs");
 var rm = require("rimraf");
 var helpers = require("../support/helpers");
 
-describe("create", function() {
+describe("project", function() {
 
   afterEach(function(done) {
     rm("./test-app", function() {
-      // fs.unlink('test-app/.ember', done);
       done();
     });
   });
 
   it("should add a bunch of files and directories", function(done) {
-    exec("./bin/ember create test-app", function() {
+    exec("./bin/ember project test-app", function(err) {
       helpers.assertPathsExist([
         "test-app/.ember",
         "test-app/controllers",

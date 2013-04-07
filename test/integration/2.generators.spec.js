@@ -1,14 +1,10 @@
-// Being a bit lazy with these pending tests.
-// The build tests indirectly test the generators but it's
-// desirable to test the generoators directly
-
 var exec = require("child_process").exec;
 var fs = require("fs");
 var rm = require("rimraf");
 var helpers = require("../support/helpers");
 
 function createTestApp(done) {
-  exec("./bin/ember create test-app", function() {
+  exec("./bin/ember project test-app", function(err) {
     fs.exists('test-app/.ember', function(exists) {
       console.log(exists)
       exists.should.equal(true);
@@ -18,7 +14,6 @@ function createTestApp(done) {
 }
 function removeTestApp(done) {
   rm("./test-app", function() {
-    // fs.unlink('.ember', done);
     done();
   });
 }
