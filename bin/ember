@@ -36,8 +36,7 @@ program
   .option('-r, --route [name]',             'generates a route')
   .option('-s, --scaffold [name] [fields]', 'scaffolds full CRUD for a model')
   .option('-t, --template [name]',          'generates a handlebars template')
-  .option('-v, --view [name]',              'generates a view')
-  .option('-p, --project [name]',              'generates a project');
+  .option('-v, --view [name]',              'generates a view');
 
 program
   .command('precompile')
