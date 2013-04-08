@@ -14,12 +14,12 @@
   <div class="span9">
     <div class="row-fluid">
       <h2>{{title}}</h2>
-      {{#each fields}}
+      \{{#with model}}{{#each fields}}
       <p>
         <b>{{title}}:</b> \{{{{name}}}}}
       </p>
-      {{/each}}
-
+      {{/each}}\{{/with}}
+      
       \{{#linkTo "{{resourcesRoute}}" class="btn"}}←All {{resources}}\{{/linkTo}}
       \{{#linkTo "{{editRoute}}" model class="btn btn-primary"}}Edit\{{/linkTo}}
       <a href="#" \{{action "destroy"}} class="btn btn-danger">Destroy</a>
