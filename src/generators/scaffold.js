@@ -29,63 +29,64 @@ function createModel(resource, fields) {
 
 function createControllers(resource) {
   var modelRoute = inflector.underscore(inflector.singularize(resource));
-  var saveDir = root + '/controllers/';
   var underscored = inflector.underscore(resource);
+  var saveDir = root + '/controllers/'+inflector.pluralize(underscored)+'/';
   var objectName = inflector.objectify(resource) + 'Controller';
   var editController = template.write(
     'scaffold/controllers/edit_resource_controller.js',
-    saveDir + 'edit_' + underscored + '_controller.js',
+    saveDir + 'edit_controller.js',
     {
       objectName: 'Edit' + objectName,
+      resourcesRoute: inflector.pluralize(underscored)+'.show',
       modelRoute: modelRoute
     },
     true
   );
   var newController = template.write(
     'scaffold/controllers/new_resource_controller.js',
-    saveDir + 'new_' + underscored + '_controller.js',
+    saveDir + 'new_controller.js',
     {
       editObjectName: 'Edit' + objectName,
-      editObjectPath: './edit_' + underscored + '_controller',
+      editObjectPath: './edit_controller',
       objectName: 'New' + objectName
     },
     true
   );
-  var resourceController = template.write(
+  var showController = template.write(
     'scaffold/controllers/resource_controller.js',
-    saveDir + underscored + '_controller.js',
+    saveDir + 'show_controller.js',
     {
       objectName: objectName,
       resourcesRoute: inflector.pluralize(modelRoute)
     },
     true
   );
-  return rsvp.all(editController, newController, resourceController);
+  return rsvp.all(editController, newController, showController);
 }
 
 function createRoutes(resource) {
-  var saveDir = root + '/routes/';
-  var objectName = inflector.objectify(resource) + 'Route';
   var underscored = inflector.underscore(resource);
+  var saveDir = root + '/routes/'+inflector.pluralize(underscored)+'/';
+  var objectName = inflector.objectify(resource) + 'Route';
   var modelName = inflector.underscore(inflector.singularize(resource));
   var newRoute = template.write(
     'scaffold/routes/new_resource_route.js',
-    saveDir + 'new_' + underscored + '_route.js',
+    saveDir + 'new_route.js',
     {
-      modelName: modelName,
-      modelPath: '../models/' + inflector.underscore(modelName),
+      modelName: inflector.objectify(modelName),
+      modelPath: '../../models/' + inflector.underscore(modelName),
       objectName: 'New' + objectName,
-      editRoute: 'edit_' + modelName,
-      controller: 'new_' + underscored
+      editRoute: inflector.pluralize(underscored)+'/edit',
+      controller: inflector.pluralize(underscored)+'_new'
     },
     true
   );
   var resourcesRoute = template.write(
     'scaffold/routes/resources_route.js',
-    saveDir + inflector.pluralize(underscored) + '_route.js',
+    saveDir + 'index_route.js',
     {
       modelName: inflector.objectify(modelName),
-      modelPath: '../models/' + inflector.underscore(modelName),
+      modelPath: '../../models/' + inflector.underscore(modelName),
       objectName: objectName
     },
     true
@@ -100,10 +101,10 @@ function createTemplates(resource, fields) {
   });
 
   var modelName = inflector.underscore(inflector.singularize(resource));
-  var saveDir = root + '/templates/';
+  var saveDir = root + '/templates/'+inflector.pluralize(resource)+'/';
   var edit = template.write(
     'scaffold/templates/edit_resource.hbs',
-    saveDir + 'edit_' + resource + '.hbs',
+    saveDir + 'edit.hbs',
     {
       title: inflector.humanize(resource),
       fields: fields
@@ -113,23 +114,24 @@ function createTemplates(resource, fields) {
   var title = inflector.humanize(resource);
   var resourceTemplate = template.write(
     'scaffold/templates/resource.hbs',
-    saveDir + resource + '.hbs',
+    saveDir + 'show.hbs',
     {
       title: title,
       fields: fields,
-      editRoute: 'edit_' + inflector.underscore(resource),
-      resourcesRoute: inflector.pluralize(modelName),
+      editRoute: inflector.pluralize(modelName)+'.edit',
+      resourcesRoute: inflector.pluralize(modelName)+'.index',
       resources: inflector.pluralize(title)
     },
     true
   );
   var resources = template.write(
     'scaffold/templates/resources.hbs',
-    saveDir + inflector.pluralize(resource) + '.hbs',
+    saveDir + 'index.hbs',
     {
       title: inflector.pluralize(inflector.humanize(resource)),
       modelTitle: inflector.humanize(modelName),
-      newPath: 'new_' + inflector.underscore(resource),
+      newPath: inflector.pluralize(modelName)+'.new',
+      showPath: inflector.pluralize(modelName)+'.show',
       resource: modelName,
       fields: fields
     },

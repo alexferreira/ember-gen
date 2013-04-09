@@ -22,7 +22,7 @@
           \{{#each {{resource}} in controller}}
           <tr>{{#each fields}}
             <td>\{{{{../resource}}.{{name}}}}}</td>{{/each}}
-            <td>\{{#linkTo "{{resource}}" {{resource}}}}}view\{{/linkTo}}</td>
+            <td>\{{#linkTo "{{showPath}}" {{resource}}}}}view\{{/linkTo}}</td>
           </tr>
           \{{/each}}
         </tbody>

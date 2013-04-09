@@ -8,7 +8,7 @@ var {{objectName}} = Ember.ObjectController.extend({
   redirectToModel: function() {
     var router = this.get('target');
     var model = this.get('model');
-    router.transitionTo('{{modelRoute}}', model);
+    router.transitionTo('{{resourcesRoute}}', model);
   }
 
 });
