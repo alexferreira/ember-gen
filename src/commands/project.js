@@ -3,7 +3,6 @@ var rsvp = require('rsvp-that-works');
 var message = require('../util/message');
 var appDirs = require('../util/appDirs');
 var template = require('../util/template');
-
 var root = '.';
 var libPath = __dirname + '/../../packages';
 var stylesheetPath = __dirname + '/../templates/create/stylesheets';
@@ -13,20 +12,24 @@ var files = [
   'app.js',
   'store.js',
   'routes.js',
+  'functions.js',
   'templates/application.hbs',
   'templates/index.hbs'
 ];
 
 module.exports = function(program) {
   root = program.args[0] || root;
+  namespace = program.args[1].namespace || 'App';
+
   message.notify("-> Creating application files and directories");
-  return makeEmberFile().
-    then(makeRootDirectory).
+
+  return makeRootDirectory().
+    then(makeEmberFile).
     then(mkdirs).
     then(createFiles).
     then(copyLibs).
     then(copyStylesheets).
-    then(createJavascriptsFolder)
+    then(createJavascriptsFolder);
 };
 
 function makeRootDirectory() {
@@ -108,6 +111,7 @@ function makeEmberFile() {
   var ember = rootify('.ember');
   return template.write('create/ember', ember, {
     appDir: '.',
+    namespace: namespace,
     modules: 'cjs'
   });
 }

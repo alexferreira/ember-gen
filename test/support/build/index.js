@@ -9,6 +9,7 @@ require('./vendor/ember-data');
 require('./vendor/ember-validations');
 require('./vendor/ember-easyform');
 require('./templates');
+require('./functions');
 
 var App = window.App = require('./app');
 

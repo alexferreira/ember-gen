@@ -9,12 +9,14 @@ require('./vendor/ember-data');
 require('./vendor/ember-validations');
 require('./vendor/ember-easyform');
 require('./templates');
+{{#each helpers}}require('./{{path}}');
+{{/each}}require('./functions');
 
-var App = window.App = require('./app');
+var {{namespace}} = window.{{namespace}} = require('./app');
 
-App.Store = require('./store');
+{{namespace}}.Store = require('./store');
 {{#each modules}}
-App.{{objectName}} = require('./{{path}}');{{/each}}
+{{namespace}}.{{objectName}} = require('./{{path}}');{{/each}}
 
 require('./routes');
 
