@@ -13,6 +13,7 @@ program
   .command('project')
   .description('creates a new ember application')
   .usage('[dir]')
+  .option('-n, --namespace [name]',        'create namespace [name] for application: default namespace "App"')
   .action(function() { project(program); });
 
 program
@@ -36,6 +37,7 @@ program
   .option('-r, --route [name]',             'generates a route')
   .option('-s, --scaffold [name] [fields]', 'scaffolds full CRUD for a model')
   .option('-t, --template [name]',          'generates a handlebars template')
+  .option('-h, --helper [name]',            'generates a handlebars helper')
   .option('-v, --view [name]',              'generates a view');
 
 program
