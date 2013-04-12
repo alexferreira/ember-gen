@@ -56,8 +56,21 @@ describe("template", function() {
   it("should save to sub directory");
 });
 
-describe("mixin", function() {
+describe("helper", function() {
 
+  beforeEach(createTestApp);
+
+  afterEach(removeTestApp);
+
+  it("should generate a helper named 'truncate' in folder 'helpers'", function(done) {
+    call("-h truncate", function() {
+      helpers.assertPathsExist(["test-app/helpers/truncate.js"], done);
+    });
+  });
+});
+
+describe("mixin", function() {
+  
   beforeEach(createTestApp);
 
   afterEach(removeTestApp);

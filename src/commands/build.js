@@ -9,17 +9,14 @@ var template = require('../util/template');
 var inflector = require('../util/inflector');
 var walk = require('walk').walkSync;
 var precompile = require('../util/precompile');
-var parseBuildCommand = require('../util/parseBuildCommand');
 var findit = require('findit');
-var root;
+var config,root;
 
 module.exports = function(program) {
-  root = require('../util/config')().appDir;
-
-  env = parseBuildCommand([].slice.call(arguments, 0));
-
-  isMinify = env['args'][0].minify
-  isWatch = env['args'][0].watch
+  config = require('../util/config')();
+  root = config.appDir;
+  isMinify = program.args[0].minify
+  isWatch = program.args[0].watch
 
   precompile(rootify('templates'), rootify('templates.js'), function() {
     createIndex().then(build);
@@ -30,6 +27,7 @@ module.exports = function(program) {
 
 function createIndex() {
   var modules = [];
+  var helpers = [];
   appDirs.forEach(function(dirName) {
     if (dirName == 'templates') return;
     var dirPath = rootify(dirName);
@@ -37,11 +35,16 @@ function createIndex() {
     walker.on('file', function(dir, stats, next) {
       if (stats.name.charAt(0) !== '.') {
         var path = unroot(dir + '/' + stats.name).replace(/\.js$/, '');
-        var name = inflector.objectify(path.replace(dirName, ''));
-        modules.push({
-          objectName: name,
-          path: path
-        });
+        if (dirName == 'helpers') {
+          helpers.push({path: path});
+        } else {
+          var name = inflector.objectify(path.replace(dirName, ''));
+          modules.push({
+            namespace: config.namespace,
+            objectName: name,
+            path: path
+          });
+        }
       }
       next();
     });
@@ -50,7 +53,7 @@ function createIndex() {
   return template.write(
     'build/index.js',
     rootify('index.js'),
-    {modules: modules},
+    {modules: modules, helpers: helpers, namespace: config.namespace},
     true
   );
 }
@@ -79,7 +82,9 @@ function watch() {
       fs.watchFile(file, { persistent: true, interval: 100 }, function (curr, prev) {
         if (curr.mtime > prev.mtime) {
           message.notify("-> Build: generate application.js");
-          build();
+          precompile(rootify('templates'), rootify('templates.js'), function() {
+            createIndex().then(build);
+          });
         }
       });
     }
