@@ -14,7 +14,8 @@
     "rsvp-that-works": "*",
     "browserbuild": "0.6.0",
     "fs-extra": "0.5.0",
-    "uglify-js": "*"
+    "uglify-js": "*",
+    "findit":"*"
   },
   "devDependencies": {
     "mocha": "*",
