@@ -34,7 +34,6 @@ describe('parseGeneratorCommand', function() {
     });
   });
 
-
   it('parses -m taco shell:string', function() {
     var args = [
       'shell:string',
