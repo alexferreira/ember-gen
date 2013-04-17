@@ -9,7 +9,7 @@ program
   .usage("[command] [options]\n\n  Command-Specific Help\n\n    ember [command] --help");
 
 program
-  .command('project')
+  .command('new')
   .description('creates a new ember application [dir]')
   .usage('[dir]')
   .option('-n, --namespace [name]',       'create namespace [name] for application: default namespace "App"')
@@ -17,7 +17,7 @@ program
   .action(function() { project.apply(null, arguments); });
   
 program
-  .command('build')
+  .command('build|b')
   .description('compiles templates and builds the app')
   .usage(' ')
   .action(function() { build(program); })
@@ -25,8 +25,8 @@ program
   .option('-w, --watch',    'watch files change')
 
 program
-  .command('generate')
-  .description('generates application files')
+  .command('generate|g')
+  .description('generates application files (short-cut alias: "g")')
   .usage("[options] [name]\n\n    [name]    the under_score name of your object\n    [fields]  field:type pairs, ex: 'name:string age:number broke:boolean'\n    [options] can be combined")
   .action(function() {
     generate.apply(null, arguments);
@@ -41,8 +41,8 @@ program
   .option('-v, --view [name]',              'generates a view');
 
 program
-  .command('precompile')
-  .description('precompile templates from src dir to target dir')
+  .command('precompile|p')
+  .description('precompile templates from src dir to target dir (short-cut alias: "p")')
   .action(function() { precompile(program); })
   .option('-d, --directory [directory]', 'source template directory')
   .option('-f, --file [file]', 'output file');

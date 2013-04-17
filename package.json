@@ -5,7 +5,7 @@
     "ember": "./bin/ember"
   },
   "dependencies": {
-    "commander": "1.1.1",
+    "commander": "git://github.com/alexferreira/commander.js#master",
     "cli-color": "0.2.1",
     "walk": "2.2.1",
     "handlebars": "1.0.8",
