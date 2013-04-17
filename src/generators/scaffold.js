@@ -10,6 +10,7 @@ var inf = inflector;
 module.exports = function(resource, env) {
   config = require('../util/config')();
   root = config.appDir;
+  templateName = config.template;
   return rsvp.all(
     createModel(resource, env.fields),
     createControllers(resource),
@@ -103,7 +104,7 @@ function createTemplates(resource, fields) {
   var modelName = inflector.underscore(inflector.singularize(resource));
   var saveDir = root + '/templates/'+inflector.pluralize(resource)+'/';
   var edit = template.write(
-    'scaffold/templates/edit_resource.hbs',
+    'scaffold/templates_'+templateName+'/edit_resource.hbs',
     saveDir + 'edit.hbs',
     {
       title: inflector.humanize(resource),
@@ -113,7 +114,7 @@ function createTemplates(resource, fields) {
   );
   var title = inflector.humanize(resource);
   var resourceTemplate = template.write(
-    'scaffold/templates/resource.hbs',
+    'scaffold/templates_'+templateName+'/resource.hbs',
     saveDir + 'show.hbs',
     {
       title: title,
@@ -125,7 +126,7 @@ function createTemplates(resource, fields) {
     true
   );
   var resources = template.write(
-    'scaffold/templates/resources.hbs',
+    'scaffold/templates_'+templateName+'/resources.hbs',
     saveDir + 'index.hbs',
     {
       title: inflector.pluralize(inflector.humanize(resource)),
