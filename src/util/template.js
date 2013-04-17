@@ -12,6 +12,7 @@ var read = exports.read = function(name) {
 };
 
 var write = exports.write = function(srcPath, savePath, locals, force) {
+  savePath = savePath.replace(/(_clean|_bootstrap)/, '');
   return fsp.exists(savePath).then(function(exists) {
     if (!force && exists) {
       message.fileExists(savePath);
