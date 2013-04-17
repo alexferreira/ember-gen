@@ -3,7 +3,6 @@ var program = require('commander');
 var project = require('../src/commands/project');
 var build = require('../src/commands/build');
 var generate = require('../src/commands/generate');
-//var message = require('../src/util/message');
 
 program
   .version('0.1.0')
@@ -11,11 +10,12 @@ program
 
 program
   .command('project')
-  .description('creates a new ember application')
+  .description('creates a new ember application [dir]')
   .usage('[dir]')
-  .option('-n, --namespace [name]',        'create namespace [name] for application: default namespace "App"')
-  .action(function() { project(program); });
-
+  .option('-n, --namespace [name]',       'create namespace [name] for application: default namespace "App"')
+  .option('-t, --template [name]',        'create files with template [name] for application: default template "clean"')
+  .action(function() { project.apply(null, args); });
+  
 program
   .command('build')
   .description('compiles templates and builds the app')
@@ -46,7 +46,6 @@ program
   .action(function() { precompile(program); })
   .option('-d, --directory [directory]', 'source template directory')
   .option('-f, --file [file]', 'output file');
-
 
 program.parse(process.argv);
 
