@@ -7,24 +7,32 @@ var root = '.';
 var libPath = __dirname + '/../../packages';
 var stylesheetPath = __dirname + '/../templates/create/stylesheets';
 
-var files = [
-  'index.html',
-  'app.js',
-  'store.js',
-  'routes.js',
-  'functions.js',
-  'templates/application.hbs',
-  'templates/index.hbs'
-];
-
-module.exports = function(program) {
-  root = program.args[0] || root;
-  namespace = program.args[1].namespace || 'App';
-
+module.exports = function(path, env) {
   message.notify("-> Creating application files and directories");
 
+  var env = arguments[arguments.length - 1];
+  root = arguments.length > 1 ? path : root;
+  var template = env.template || 'clean';
+
+  files = [
+    'index_'+template+'.html',
+    'app.js',
+    'store.js',
+    'routes.js',
+    'functions.js',
+    'templates_'+template+'/application.hbs',
+    'templates_'+template+'/index.hbs'
+  ];
+
+  emberFileParams = {
+    appDir: '.',
+    namespace: env.namespace || 'App', 
+    template: template,
+    modules: 'cjs'
+  };
+
   return makeRootDirectory().
-    then(makeEmberFile).
+    then(makeEmberFile(emberFileParams)).
     then(mkdirs).
     then(createFiles).
     then(copyLibs).
@@ -107,13 +115,9 @@ function copyStylesheet(name) {
   });
 }
 
-function makeEmberFile() {
+function makeEmberFile(params) {
   var ember = rootify('.ember');
-  return template.write('create/ember', ember, {
-    appDir: '.',
-    namespace: namespace,
-    modules: 'cjs'
-  });
+  return template.write('create/ember', ember, params);
 }
 
 function rootify(path) {

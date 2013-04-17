@@ -14,7 +14,7 @@ program
   .usage('[dir]')
   .option('-n, --namespace [name]',       'create namespace [name] for application: default namespace "App"')
   .option('-t, --template [name]',        'create files with template [name] for application: default template "clean"')
-  .action(function() { project.apply(null, args); });
+  .action(function() { project.apply(null, arguments); });
   
 program
   .command('build')
