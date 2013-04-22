@@ -11,16 +11,16 @@
     "handlebars": "1.0.8",
     "jsdom": "0.3.4",
     "fleck": "0.5.1",
-    "rsvp-that-works": "*",
+    "rsvp-that-works": "1.2.0",
     "browserbuild": "0.6.0",
     "fs-extra": "0.5.0",
-    "uglify-js": "*",
-    "findit":"*"
+    "uglify-js": "2.2.5",
+    "findit":"0.1.2"
   },
   "devDependencies": {
-    "mocha": "*",
-    "should": "*",
-    "rimraf": "*"
+    "mocha": "1.9.0",
+    "should": "1.2.2",
+    "rimraf": "2.1.4"
   },
   "scripts": {
     "test": "node_modules/.bin/mocha --require should --reporter spec --ui bdd --growl $(find test -name \"*.spec.js\")"
@@ -31,5 +31,9 @@
   "readmeFilename": "README.md",
   "_id": "ember-gen@0.1.0",
   "description": "Ember Gen -----------",
+  "repository" : {
+    "type": "git",
+    "url": "https://github.com/alexferreira/ember-gen.git"
+  },
   "_from": "ember-gen"
 }
