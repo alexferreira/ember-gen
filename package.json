@@ -30,7 +30,7 @@
   },
   "readmeFilename": "README.md",
   "_id": "ember-gen@0.1.0",
-  "description": "Ember Gen -----------",
+  "description": "Ember Generator Applications -----------",
   "repository" : {
     "type": "git",
     "url": "https://github.com/alexferreira/ember-gen.git"
