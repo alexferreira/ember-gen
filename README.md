@@ -28,7 +28,7 @@ npm install -g ember-gen
 ## Quickstart
 
 ```
-ember new demo-app
+ember new demo-app -t bootstrap
 cd demo-app
 ember generate -s contact title:string email:string age:number
 ember build
