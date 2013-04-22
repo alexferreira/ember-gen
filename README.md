@@ -1,6 +1,16 @@
 Ember Gen
 -----------
 
+## Features
+
+- prescribed file organization for sanity
+- scaffolding for a smaller learning curve
+- precompilation template for better performance
+- application of a single file to a better experience
+- generators for faster application development
+- commonjs (node) style modules for js community <3 and isolated testing
+- easily build semantic forms in ember and simple validators
+
 ## Dependence
 
 To install the ember-gen is required
@@ -12,25 +22,13 @@ npm
 ## Installation
 
 ```
-git clone git@github.com:alexferreira/ember-gen.git
-cd ember-gen
-npm install -g
+npm install -g ember-gen
 ```
-
-## Features
-
-- prescribed file organization for sanity
-- scaffolding for a smaller learning curve
-- precompilation template for better performance
-- application of a single file to a better experience
-- generators for faster application development
-- commonjs (node) style modules for js community <3 and isolated testing
-- easily build semantic forms in ember and simple validators
 
 ## Quickstart
 
 ```
-ember project demo-app
+ember new demo-app
 cd demo-app
 ember generate -s contact title:string email:string age:number
 ember build
