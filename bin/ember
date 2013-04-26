@@ -2,6 +2,7 @@
 var program = require('commander');
 var project = require('../src/commands/project');
 var build = require('../src/commands/build');
+var server = require('../src/commands/server');
 var generate = require('../src/commands/generate');
 
 program
@@ -15,14 +16,18 @@ program
   .option('-n, --namespace [name]',       'create namespace [name] for application: default namespace "App"')
   .option('-t, --template [name]',        'create files with template [name] for application: default template "clean"')
   .action(function() { project.apply(null, arguments); });
-  
+
+program
+  .command('server|s')
+  .description('compiles templates and builds the app')
+  .usage(' ')
+  .action(function() { server(program); });
+
 program
   .command('build|b')
   .description('compiles templates and builds the app')
   .usage(' ')
-  .action(function() { build(program); })
-  .option('-m, --minify',    'generates a application.min.js')
-  .option('-w, --watch',    'watch files change')
+  .action(function() { build(program); });
 
 program
   .command('generate|g')
