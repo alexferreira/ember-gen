@@ -15,15 +15,21 @@ var config,root;
 module.exports = function(program) {
   config = require('../util/config')();
   root = config.appDir;
-  isMinify = program.args[0].minify
-  isWatch = program.args[0].watch
-
+  checkApplication();
   precompile(rootify('templates'), rootify('templates.js'), function() {
-    createIndex().then(build);
+    createIndex().then(build).then(createMinify);
   });
-
-  if(isWatch) watch();
 };
+
+function checkApplication(){
+  try {
+    stats = fs.lstatSync(rootify('javascripts/application.js')); // throws if path doesn't exist
+  } catch (e) {
+    message.error("-> application.js file was not found, it is necessary to build, please run the command: ember server");
+    return;
+  }
+  return;
+}
 
 function createIndex() {
   var modules = [];
@@ -53,7 +59,7 @@ function createIndex() {
   return template.write(
     'build/index.js',
     rootify('index.js'),
-    {modules: modules, helpers: helpers, namespace: config.namespace},
+    {modules: modules, helpers: helpers, namespace: config.namespace, reload: false},
     true
   );
 }
@@ -66,7 +72,6 @@ function build() {
     if(stdout) console.log(stdout);
     if(stderr) console.log(stderr);
     if (error) throw new Error(error);
-    if(isMinify) minify();
     cleanup();
   });
 }
@@ -76,31 +81,28 @@ function cleanup() {
   // fs.unlink(rootify('templates.js'));
 }
 
-function watch() {
-  findit.find(root, function (file) {
-    if(file != rootify('index.js') && file != rootify('templates.js') && file != rootify('javascripts/application.js')){
-      fs.watchFile(file, { persistent: true, interval: 100 }, function (curr, prev) {
-        if (curr.mtime > prev.mtime) {
-          message.notify("-> Build: generate application.js");
-          precompile(rootify('templates'), rootify('templates.js'), function() {
-            createIndex().then(build);
-          });
-        }
+function createMinify() {
+  compressed_file = rootify('javascripts/application.min.js');
+  fs.exists(compressed_file, function(exist) {
+    if(exist){
+      message.removeFile("javascripts/application.min.js");
+      fs.unlink(compressed_file, function (error) {
+        if (error) throw new Error(error);
+        minify(compressed_file);
       });
+    } else {
+      minify(compressed_file);
     }
   });
 }
 
-function minify() {
-  message.notify("-> Minify: remove and create application.min.js");
-  message.removeFile("javascripts/application.min.js");
-  fs.unlink(rootify('javascripts/application.min.js'), function (error) {
-    // if (error) throw error;
-    minify = UglifyJS.minify(rootify('javascripts/application.js')).code;
-    fs.writeFile(rootify('javascripts/application.min.js'), minify, function (error) {
-      if (error) throw new Error(error);
-      message.fileCreated("javascripts/application.js");
-    });
+function minify(compressed_file){
+  message.notify("-> Minify: create application.min.js");
+  minify = UglifyJS.minify(rootify('javascripts/application.js')).code;
+  fs.writeFile(rootify('javascripts/application.min.js'), minify, function (error) {
+    if (error) throw new Error(error);
+    message.fileCreated("javascripts/application.min.js");
+    cleanup();
   });
 }
 
