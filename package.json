@@ -38,7 +38,7 @@
   ],
   "dependencies" : {
     "commander": "https://github.com/alexferreira/commander.js/tarball/master",
-    "cli-color": "0.2.1",
+    "cli-color": "0.2.2",
     "walk": "2.2.1",
     "handlebars": "1.0.8",
     "jsdom": "0.3.4",
