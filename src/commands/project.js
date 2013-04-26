@@ -35,9 +35,8 @@ module.exports = function(path, env) {
     then(makeEmberFile(emberFileParams)).
     then(mkdirs).
     then(createFiles).
-    then(copyLibs).
     then(copyStylesheets).
-    then(createJavascriptsFolder);
+    then(copyLibs);
 };
 
 function makeRootDirectory() {
@@ -59,10 +58,6 @@ function createFiles() {
 function createFile(name) {
   var path = rootify(name);
   return template.write('create/' + name, path);
-}
-
-function createJavascriptsFolder() {
-  return mkdir('javascripts')
 }
 
 function copyLibs() {
