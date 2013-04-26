@@ -45,7 +45,7 @@
     "fleck": "0.5.1",
     "rsvp-that-works": "1.2.0",
     "browserbuild": "0.6.0",
-    "fs-extra": "0.5.0",
+    "fs-extra": "0.6.0",
     "uglify-js": "2.2.5",
     "findit":"0.1.2"
   },
