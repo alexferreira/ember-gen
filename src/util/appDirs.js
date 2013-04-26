@@ -5,5 +5,7 @@ module.exports = [
   'templates',
   'helpers',
   'views',
-  'mixins'
+  'mixins',
+  'javascripts',
+  'images'
 ];
