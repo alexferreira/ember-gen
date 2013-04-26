@@ -15,13 +15,18 @@
     <div class="row-fluid">
       <h2>{{title}}</h2>
       <table class="table table-striped table-bordered table-hover">
-        <thead>{{#each fields}}
-          <th>{{name}}</th>{{/each}}
+        <thead>
+          {{#each fields}}
+            <th>{{name}}</th>
+          {{/each}}
+          <th>Actions</th>
         </thead>
         <tbody>
           \{{#each {{resource}} in controller}}
-          <tr>{{#each fields}}
-            <td>\{{{{../resource}}.{{name}}}}}</td>{{/each}}
+          <tr>
+            {{#each fields}}
+              <td>\{{{{../resource}}.{{name}}}}}</td>
+            {{/each}}
             <td>\{{#linkTo "{{showPath}}" {{resource}}}}}view\{{/linkTo}}</td>
           </tr>
           \{{/each}}
