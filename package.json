@@ -40,7 +40,7 @@
     "commander": "https://github.com/alexferreira/commander.js/tarball/master",
     "cli-color": "0.2.2",
     "walk": "2.2.1",
-    "handlebars": "1.0.8",
+    "handlebars": "1.0.10",
     "jsdom": "0.3.4",
     "fleck": "0.5.1",
     "rsvp-that-works": "1.2.0",
