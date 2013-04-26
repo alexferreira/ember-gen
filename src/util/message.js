@@ -1,6 +1,7 @@
 var color = require('cli-color');
 var green = color.green;
 var yellow = color.yellow;
+var red = color.red;
 
 exports.assert = function(message, test) {
   if (test) return;
@@ -9,7 +10,7 @@ exports.assert = function(message, test) {
 
 exports.error = function(message, test) {
   if (test) return;
-  console.log('ember: ' + message);
+  console.log(red('ember: ') + message);
   process.exit();
 };
 
