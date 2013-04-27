@@ -4,7 +4,7 @@
   "version": "0.1.1-b1",
   "author": "Alex Ferreira <dev@alexferreira.eti.br>",
   "_id": "ember-gen@0.1.1-b1",
-  "_from": "ember-gen",
+  "_from": "ember-gen@beta",
   "description": "Ember Generator Applications -----------",
   "readmeFilename": "README.md",
   "bin": {
@@ -53,6 +53,9 @@
     "mocha": "1.9.0",
     "should": "1.2.2",
     "rimraf": "2.1.4"
+  },
+  "directories": {
+    "test": "./test"
   },
   "license": "MIT",
   "engines": {
