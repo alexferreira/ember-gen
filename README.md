@@ -96,6 +96,7 @@ Package versions:
 
 - ember 1.0.0-RC.2
 - ember-data rev 12
+- ember-template-compiler 1.0.0-RC.2
 - handlebars 1.0.0-rc.3
 - jQuery 1.9.1
 - Underscore 1.4.4
