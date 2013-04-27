@@ -22,6 +22,10 @@ exports.fileCreated = function(path) {
   console.log(green("   created:\t") + path);
 };
 
+exports.fileUpdated = function(path) {
+  console.log(green("   update:\t") + path);
+};
+
 exports.fileExists = function(path) {
   console.log(yellow("   exists:\t") + path);
 };
@@ -29,4 +33,3 @@ exports.fileExists = function(path) {
 exports.removeFile = function(path) {
   console.log(yellow("   remove:\t") + path);
 };
-
