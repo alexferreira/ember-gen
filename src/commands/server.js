@@ -1,7 +1,6 @@
 var exec = require('child_process').exec;
 var fs = require('fs');
 var handlebars = require('handlebars');
-var jsdom = require('jsdom');
 var message = require('../util/message');
 var UglifyJS = require("uglify-js");
 var appDirs = require('../util/appDirs');

@@ -41,7 +41,6 @@
     "cli-color": "0.2.2",
     "walk": "2.2.1",
     "handlebars": "1.0.10",
-    "jsdom": "0.6.0",
     "fleck": "0.5.1",
     "rsvp-that-works": "1.2.0",
     "browserbuild": "0.6.0",
