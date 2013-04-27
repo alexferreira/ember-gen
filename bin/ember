@@ -19,7 +19,7 @@ program
 
 program
   .command('server|s')
-  .description('compiles templates and builds the app')
+  .description('start server with observer to automatically build and livereload')
   .usage(' ')
   .action(function() { server(program); });
 
