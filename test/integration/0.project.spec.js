@@ -12,7 +12,7 @@ describe("project", function() {
   });
 
   it("should add a bunch of files and directories", function(done) {
-    exec("./bin/ember project test-app", function(err) {
+    exec("./bin/ember new test-app", function(err) {
       helpers.assertPathsExist([
         "test-app/.ember",
         "test-app/controllers",
@@ -22,9 +22,10 @@ describe("project", function() {
         "test-app/views",
         "test-app/vendor",
         "test-app/index.html",
-        "test-app/App.js", 
-        "test-app/Store.js", 
+        "test-app/app.js", 
+        "test-app/store.js", 
         "test-app/routes.js",
+        "test-app/functions.js",
         "test-app/templates/application.hbs",
         "test-app/templates/index.hbs",
         "test-app/vendor/ember-data.js",
