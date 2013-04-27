@@ -4,6 +4,7 @@ var project = require('../src/commands/project');
 var build = require('../src/commands/build');
 var server = require('../src/commands/server');
 var generate = require('../src/commands/generate');
+var update = require('../src/commands/update');
 
 program
   .version('0.1.0')
@@ -22,6 +23,12 @@ program
   .description('start server with observer to automatically build and livereload')
   .usage(' ')
   .action(function() { server(program); });
+
+program
+  .command('update_packages|up')
+  .description('updates the packages used in the vendor application.')
+  .usage(' ')
+  .action(function() { update(program); });
 
 program
   .command('build|b')
