@@ -10,6 +10,7 @@ Ember Gen
 - generators for faster application development
 - commonjs (node) style modules for js community <3 and isolated testing
 - easily build semantic forms in ember and simple validators
+- livereload browser every file change
 
 ## Dependence
 
