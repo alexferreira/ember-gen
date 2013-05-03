@@ -30,14 +30,14 @@ require('./vendor/ember-data');
 require('./vendor/ember-validations');
 require('./vendor/ember-easyform');
 require('./templates');
-{{#each helpers}}require('./{{path}}');
-{{/each}}require('./functions');
+{{#each helpers}}
+require('./{{path}}');{{/each}}
+require('./functions');
 
 var {{namespace}} = window.{{namespace}} = require('./app');
 
-{{namespace}}.Store = require('./store');
+{{namespace}}.Store = require('./config/store');
 {{#each modules}}
 {{namespace}}.{{objectName}} = require('./{{path}}');{{/each}}
-
-require('./routes');
-
+require('./config/routes');
+require('./config/locales');

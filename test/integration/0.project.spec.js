@@ -15,6 +15,10 @@ describe("project", function() {
     exec("./bin/ember new test-app", function(err) {
       helpers.assertPathsExist([
         "test-app/.ember",
+        "test-app/config",
+        "test-app/config/routes.js",
+        "test-app/config/store.js",
+        "test-app/config/locales",
         "test-app/controllers",
         "test-app/models",
         "test-app/routes",
@@ -23,8 +27,6 @@ describe("project", function() {
         "test-app/vendor",
         "test-app/index.html",
         "test-app/app.js", 
-        "test-app/store.js", 
-        "test-app/routes.js",
         "test-app/functions.js",
         "test-app/templates/application.hbs",
         "test-app/templates/index.hbs",

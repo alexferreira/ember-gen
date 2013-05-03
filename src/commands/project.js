@@ -17,9 +17,9 @@ module.exports = function(path, env) {
   files = [
     'index_'+template+'.html',
     'app.js',
-    'store.js',
-    'routes.js',
     'functions.js',
+    'config/store.js',
+    'config/routes.js',
     'templates_'+template+'/application.hbs',
     'templates_'+template+'/index.hbs'
   ];
