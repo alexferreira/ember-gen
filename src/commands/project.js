@@ -20,6 +20,7 @@ module.exports = function(path, env) {
     'functions.js',
     'config/store.js',
     'config/routes.js',
+    'config/locales.js',
     'templates_'+template+'/application.hbs',
     'templates_'+template+'/index.hbs'
   ];
