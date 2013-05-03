@@ -1,4 +1,5 @@
 var exec = require('child_process').exec;
+var fsp = require('../util/fs-promised');
 var fs = require('fs');
 var handlebars = require('handlebars');
 var message = require('../util/message');
@@ -9,27 +10,40 @@ var inflector = require('../util/inflector');
 var walk = require('walk').walkSync;
 var precompile = require('../util/precompile');
 var findit = require('findit');
+var YAML = require('yamljs');
 var EventEmitter = require('events').EventEmitter;
 var event = new EventEmitter();
+var http = require("http");
+var path = require("path");
 var config,root;
 
-var http = require("http"),
-    path = require("path"),
-    port = process.argv[2] || 8080;
-
-module.exports = function(program) {
+module.exports = function(program, test) {
+  var env = arguments[arguments.length - 1];
   config = require('../util/config')();
-  port = process.argv[3] || 8080;
+  port = env.port;
+  init = env.init;
+
+  console.log(init);
   root = config.appDir;
   mimeTypes = {"html": "text/html", "jpeg": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "js": "text/javascript", "css": "text/css"};
-  
+
   precompile(rootify('templates'), rootify('templates.js'), function() {
-    createIndex().then(build).then(server).then(watch);
+    locales().then(createIndex).then(build).then(start_server).then(watch);
   });
 };
 
+module.exports.close = function(callback){
+  this.server().close(callback);
+}
+
+function start_server(){
+  if(init) server().listen(port, "127.0.0.1", function(){
+    console.log("Server running at http://127.0.0.1:"+port+"/");
+  });
+}
+
 function server(){
-  http.createServer(function(req, res) {
+  return http.createServer(function(req, res) {
     var index = "./index.html";
     var stats;
 
@@ -58,20 +72,20 @@ function server(){
       }
     } 
 
-  }).listen(port, "127.0.0.1");
-  console.log("Server running at http://127.0.0.1:"+port+"/");
+  })
 }
 
 function createIndex() {
   var modules = [];
   var helpers = [];
   appDirs.forEach(function(dirName) {
-    if (dirName == 'templates') return;
+    if (dirName == 'templates' || dirName == 'config') return;
     var dirPath = rootify(dirName);
     var walker = walk(dirPath);
     walker.on('file', function(dir, stats, next) {
-      if (stats.name.charAt(0) !== '.') {
+      if (stats.name.charAt(0) !== '.' && stats.name.match(/\.js$/)) {
         var path = unroot(dir + '/' + stats.name).replace(/\.js$/, '');
+        if (dirName == 'javascripts') return;
         if (dirName == 'helpers') {
           helpers.push({path: path});
         } else {
@@ -95,6 +109,24 @@ function createIndex() {
   );
 }
 
+function locales() {
+  savePath = rootify('config/locales.js');
+  return fsp.readdir(rootify('config/locales')).then(function(locales) {
+    concatString = fsp.concat(locales)
+    jsonObject = 'Ember.I18n.translations = '+JSON.stringify(YAML.parse(concatString), null, 2);
+    return fsp.createFile(savePath).then(function() {
+      return fsp.writeFile(savePath, jsonObject).then(function() {
+        message.fileCreated(savePath);
+      }, fsp.error);
+    }, fsp.error);
+  });
+}
+
+function files(file){
+  lists.push(file)
+  console.log(lists);
+};
+
 function build() {
   var command = __dirname + '/../../node_modules/browserbuild/bin/browserbuild ' +
                 "-m index -b " + root + "/ `find "+ root + " -name '*.js'` > " +
@@ -104,28 +136,25 @@ function build() {
     if(stderr) console.log(stderr);
     if (error) throw new Error(error);
     event.emit('reload', true);
-    cleanup();
   });
-}
 
-function cleanup() {
-  // fs.unlink(rootify('index.js'));
-  // fs.unlink(rootify('templates.js'));
 }
 
 function watch() {
-  findit.find(root, function (file) {
-    if(file != rootify('index.js') && file != rootify('templates.js') && file != rootify('javascripts/application.js')){
-      fs.watchFile(file, { persistent: true, interval: 100 }, function (curr, prev) {
-        if (curr.mtime > prev.mtime) {
-          message.notify("-> Build: generate application.js");
-          precompile(rootify('templates'), rootify('templates.js'), function() {
-            createIndex().then(build);
-          });
-        }
-      });
-    }
-  });
+  if(init){
+    findit.find(root, function (file) {
+      if(file != rootify('index.js') && file != rootify('templates.js') && file != rootify('javascripts/application.js')){
+        fs.watchFile(file, { persistent: true, interval: 100 }, function (curr, prev) {
+          if (curr.mtime > prev.mtime) {
+            message.notify("-> Build: generate application.js");
+            precompile(rootify('templates'), rootify('templates.js'), function() {
+              locales().then(createIndex).then(build);
+            });
+          }
+        });
+      }
+    });
+  }
 }
 
 function rootify(path) {

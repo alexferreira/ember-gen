@@ -4,7 +4,7 @@ var rm = require("rimraf");
 var helpers = require("../support/helpers");
 
 function create(done) {
-  exec("./bin/ember project test-app", function(err) {
+  exec("./bin/ember new test-app -t bootstrap", function(err) {
     if (err) throw new Error(err);
     fs.exists('test-app/.ember', function(exists) {
       exists.should.equal(true);
@@ -20,7 +20,7 @@ function cleanup(done) {
 }
 
 function build(done) {
-  exec("cd test-app; ../bin/ember build", function(err) {
+  exec("cd test-app; ../bin/ember server -n", function(err) {
     if (err) throw new Error(err);
     done();
   });
