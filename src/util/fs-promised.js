@@ -8,7 +8,8 @@ var methods = [
   'readFile',
   'writeFile',
   'mkdir',
-  'readdir'
+  'readdir',
+  'concat'
 ];
 
 methods.forEach(function(method) {
@@ -41,3 +42,10 @@ exports.error = function(err) {
   throw new Error(err);
 };
 
+exports.concat = function() {
+  var out = arguments[0].map(function(filePath){
+    filePath = './config/locales/'+filePath
+    return fs.readFileSync(filePath, 'utf-8');
+  });
+  return out.join('\n');
+};
