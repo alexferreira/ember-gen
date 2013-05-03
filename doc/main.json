@@ -1,0 +1,22 @@
+{
+    "usage": "[command] [options]\n\n  Command-Specific Help\n\n    ember [command] --help",
+    "new": "creates a new ember application [dir]",
+    "new.namespace": "create namespace [name] for application: default namespace \"App\"",
+    "new.template": "create files with template [name] for application: default template \"clean\"",
+    "build": "compiles templates and builds the app",
+    "build.minify": "generates a application.min.js",
+    "build.watch": "watch files change",
+    "generate": "generates application files (short-cut alias: \"g\")",
+    "generate.usage": "[options] [name]\n\n    [name]    the under_score name of your object\n    [fields]  field:type pairs, ex: 'name:string age:number broke:boolean'\n    [options] can be combined",
+    "generate.controller": "generates a controller",
+    "generate.mixin": "generates a mixin",
+    "generate.model": "generates a model with optional [fields]",
+    "generate.route": "generates a route",
+    "generate.scaffold": "scaffolds full CRUD for a model",
+    "generate.template": "generates a handlebars template",
+    "generate.helper": "generates a handlebars helper",
+    "generate.view": "generates a view",
+    "precompile": "precompile templates from src dir to target dir (short-cut alias: \"p\")",
+    "precompile.directory": "source template directory",
+    "precompile.file": "output file"
+}
