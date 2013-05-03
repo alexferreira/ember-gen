@@ -1,4 +1,4 @@
-Ember Gen
+Ember Gen [![Build Status](https://travis-ci.org/alexferreira/ember-gen.png?branch=dev)](https://travis-ci.org/alexferreira/ember-gen)
 -----------
 
 ## Features
@@ -11,6 +11,7 @@ Ember Gen
 - commonjs (node) style modules for js community <3 and isolated testing
 - easily build semantic forms in ember and simple validators
 - livereload browser every file change
+- embedded server for development
 
 ## Dependence
 
@@ -36,6 +37,23 @@ ember build
 open demo-app/index.html
 # visit #/contacts
 ```
+
+## Server in Development
+
+The server has a livereload that will observe any changes in the project files and updates the browser automatically.
+
+the command to start the server is:
+
+```
+ember server
+```
+
+to set port use:
+
+```
+ember server -p 4000
+```
+
 
 ## Usage
 
