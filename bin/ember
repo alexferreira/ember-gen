@@ -3,49 +3,50 @@ var program = require('commander');
 var project = require('../src/commands/project');
 var build = require('../src/commands/build');
 var generate = require('../src/commands/generate');
+var doc = require('../doc/main.json');
 
 program
   .version('0.1.0')
-  .usage("[command] [options]\n\n  Command-Specific Help\n\n    ember [command] --help");
+  .usage(doc['usage']);
 
 program
   .command('new')
-  .description('creates a new ember application [dir]')
+  .description( doc['new'] )
   .usage('[dir]')
-  .option('-n, --namespace [name]',       'create namespace [name] for application: default namespace "App"')
-  .option('-t, --template [name]',        'create files with template [name] for application: default template "clean"')
+  .option('-n, --namespace [name]', doc['new.namespace'])
+  .option('-t, --template [name]', doc['new.template'])
   .action(function() { project.apply(null, arguments); });
   
 program
   .command('build|b')
-  .description('compiles templates and builds the app')
+  .description( doc['build'] )
   .usage(' ')
   .action(function() { build(program); })
-  .option('-m, --minify',    'generates a application.min.js')
-  .option('-w, --watch',    'watch files change')
+  .option('-m, --minify', doc['build.minify'])
+  .option('-w, --watch', doc['build.watch'])
 
 program
   .command('generate|g')
-  .description('generates application files (short-cut alias: "g")')
-  .usage("[options] [name]\n\n    [name]    the under_score name of your object\n    [fields]  field:type pairs, ex: 'name:string age:number broke:boolean'\n    [options] can be combined")
+  .description( doc['generate'] )
+  .usage( doc['generate.usage'] )
   .action(function() {
     generate.apply(null, arguments);
   })
-  .option('-c, --controller [name]',        'generates a controller')
-  .option('-x, --mixin [name]',             'generates a mixin')
-  .option('-m, --model [name] [fields]',    'generates a model with optional [fields]')
-  .option('-r, --route [name]',             'generates a route')
-  .option('-s, --scaffold [name] [fields]', 'scaffolds full CRUD for a model')
-  .option('-t, --template [name]',          'generates a handlebars template')
-  .option('-h, --helper [name]',            'generates a handlebars helper')
-  .option('-v, --view [name]',              'generates a view');
+  .option('-c, --controller [name]', doc['generate.controller'])
+  .option('-x, --mixin [name]', doc['generate.mixin'])
+  .option('-m, --model [name] [fields]', doc['generate.model'])
+  .option('-r, --route [name]', doc['generate.route'])
+  .option('-s, --scaffold [name] [fields]', doc['generate.scaffold'])
+  .option('-t, --template [name]', doc['generate.template'])
+  .option('-h, --helper [name]', doc['generate.helper'])
+  .option('-v, --view [name]', doc['generate.view']);
 
 program
   .command('precompile|p')
-  .description('precompile templates from src dir to target dir (short-cut alias: "p")')
+  .description( doc['precompile'] )
   .action(function() { precompile(program); })
-  .option('-d, --directory [directory]', 'source template directory')
-  .option('-f, --file [file]', 'output file');
+  .option('-d, --directory [directory]', doc['precompile.directory'])
+  .option('-f, --file [file]', doc['precompile.file']);
 
 program.parse(process.argv);
 
