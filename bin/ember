@@ -21,9 +21,11 @@ program
 
 program
   .command('server|s')
-  .description('start server with observer to automatically build and livereload')
+  .description( doc['server'] )
   .usage(' ')
-  .action(function() { server(program); });
+  .option('-p, --port <port>', doc['server.port'], Number, 3000)
+  .option('-n, --no-init', doc['server.noInit'])
+  .action(function() { server.apply(null, arguments);  });
 
 program
   .command('update_packages|up')
