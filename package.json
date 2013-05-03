@@ -46,7 +46,8 @@
     "browserbuild": "0.6.0",
     "fs-extra": "0.6.0",
     "uglify-js": "2.2.5",
-    "findit":"0.1.2"
+    "findit":"0.1.2",
+    "yamljs": "0.1.4"
   },
   "devDependencies": {
     "mocha": "1.9.0",
