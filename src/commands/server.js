@@ -22,9 +22,9 @@ module.exports = function(program, test) {
   config = require('../util/config')();
   port = env.port;
   init = env.init;
+  root = config.app.appDir;
+  vendor = config.vendor;
 
-  console.log(init);
-  root = config.appDir;
   mimeTypes = {"html": "text/html", "jpeg": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "js": "text/javascript", "css": "text/css"};
 
   precompile(rootify('templates'), rootify('templates.js'), function() {
@@ -78,6 +78,12 @@ function server(){
 function createIndex() {
   var modules = [];
   var helpers = [];
+  var vendors = [];
+
+  vendor.forEach(function(file) {
+    vendors.push({path: 'vendor/'+file});
+  }); 
+  
   appDirs.forEach(function(dirName) {
     if (dirName == 'templates' || dirName == 'config') return;
     var dirPath = rootify(dirName);
@@ -86,12 +92,13 @@ function createIndex() {
       if (stats.name.charAt(0) !== '.' && stats.name.match(/\.js$/)) {
         var path = unroot(dir + '/' + stats.name).replace(/\.js$/, '');
         if (dirName == 'javascripts') return;
+        if (dirName == 'vendor') return;
         if (dirName == 'helpers') {
           helpers.push({path: path});
         } else {
           var name = inflector.objectify(path.replace(dirName, ''));
           modules.push({
-            namespace: config.namespace,
+            namespace: config.app.namespace,
             objectName: name,
             path: path
           });
@@ -104,7 +111,7 @@ function createIndex() {
   return template.write(
     'build/index.js',
     rootify('index.js'),
-    {modules: modules, helpers: helpers, namespace: config.namespace, reload: true},
+    {modules: modules, helpers: helpers, namespace: config.app.namespace, reload: true, vendors: vendors},
     true
   );
 }

@@ -9,8 +9,8 @@ var inf = inflector;
 
 module.exports = function(resource, env) {
   config = require('../util/config')();
-  root = config.appDir;
-  templateName = config.template;
+  root = config.app.appDir;
+  templateName = config.app.template;
   return rsvp.all(
     createModel(resource, env.fields),
     createControllers(resource),

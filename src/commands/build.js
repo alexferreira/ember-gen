@@ -5,7 +5,7 @@ var config,root;
 
 module.exports = function(program) {
   config = require('../util/config')();
-  root = config.appDir;
+  root = config.app.appDir;
   checkApplication();
   createMinify();
 };
