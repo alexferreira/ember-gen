@@ -1,12 +1,12 @@
 var fs = require('fs');
+var YAML = require('yamljs');
 var message = require('./message');
 
 module.exports = function() {
-  if (fs.existsSync('.ember')) {
-    return JSON.parse(fs.readFileSync('.ember'));
+  if (fs.existsSync('config/app.yml')) {
+    return YAML.load('config/app.yml');
   } else {
-    message.notify("ember: could not find .ember file, please run `ember create [appDir]`");
+    message.notify("ember: could not find `config/app.yml` file, please run `ember new [appDir]`");
     return process.exit();
   }
 };
-
