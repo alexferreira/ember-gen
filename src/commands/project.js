@@ -28,12 +28,11 @@ module.exports = function(path, env) {
   emberFileParams = {
     appDir: '.',
     namespace: env.namespace || 'App', 
-    template: template,
-    modules: 'cjs'
+    template: template
   };
 
   return makeRootDirectory().
-    then(makeEmberFile(emberFileParams)).
+    then(makeAppConfig(emberFileParams)).
     then(mkdirs).
     then(createFiles).
     then(copyStylesheets).
@@ -111,9 +110,9 @@ function copyStylesheet(name) {
   });
 }
 
-function makeEmberFile(params) {
-  var ember = rootify('.ember');
-  return template.write('create/ember', ember, params);
+function makeAppConfig(params) {
+  var app = rootify('config/app.yml');
+  return template.write('create/config/app.yml', app, params);
 }
 
 function rootify(path) {
