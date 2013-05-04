@@ -5,7 +5,7 @@ var helpers = require("../support/helpers");
 
 function createTestApp(done) {
   exec("./bin/ember new test-app -t bootstrap", function(err) {
-    fs.exists('test-app/.ember', function(exists) {
+    fs.exists('test-app/config/app.yml', function(exists) {
       console.log(exists)
       exists.should.equal(true);
       done();

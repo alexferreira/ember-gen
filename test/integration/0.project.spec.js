@@ -14,8 +14,8 @@ describe("project", function() {
   it("should add a bunch of files and directories", function(done) {
     exec("./bin/ember new test-app", function(err) {
       helpers.assertPathsExist([
-        "test-app/.ember",
         "test-app/config",
+        "test-app/config/app.yml",
         "test-app/config/routes.js",
         "test-app/config/store.js",
         "test-app/config/locales",
