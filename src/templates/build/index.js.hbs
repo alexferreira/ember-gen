@@ -21,15 +21,8 @@
   } else {
     console.log("Sorry, your browser doesn't support server-sent events");
   }
-}, false);{{/if}}
-require('./vendor/jquery');
-require('./vendor/handlebars');
-require('./vendor/underscore');
-require('./vendor/ember');
-require('./vendor/ember-data');
-require('./vendor/ember-validations');
-require('./vendor/ember-easyform');
-require('./vendor/i18n');
+}, false);{{/if}}{{#each vendors}}
+require('./{{path}}');{{/each}}
 require('./templates');
 {{#each helpers}}
 require('./{{path}}');{{/each}}
