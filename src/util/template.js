@@ -32,7 +32,7 @@ function writeFile(srcPath, savePath, locals) {
 }
 
 var generate = exports.generate = function(type, resourceName, locals) {
-  var root = config().appDir;
+  var root = config().app.appDir;
   var ext = type == 'template' ? '.hbs' : '.js';
   name = 'generate/' + type + ext;
   path = root + '/' + inflector.pluralize(type) + '/' + resourceName + ext;
