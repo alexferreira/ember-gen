@@ -91,7 +91,7 @@ function createIndex() {
     walker.on('file', function(dir, stats, next) {
       if (stats.name.charAt(0) !== '.' && stats.name.match(/\.js$/)) {
         var path = unroot(dir + '/' + stats.name).replace(/\.js$/, '');
-        if (dirName == 'javascripts') return;
+        if (dirName == 'assets') return;
         if (dirName == 'vendor') return;
         if (dirName == 'helpers') {
           helpers.push({path: path});
@@ -148,16 +148,17 @@ function files(file){
 };
 
 function build() {
+  var savePath = rootify('assets/application.js');
   var command = __dirname + '/../../node_modules/browserbuild/bin/browserbuild ' +
                 "-m index -b " + root + "/ `find "+ root + " -name '*.js'` > " +
-                rootify('javascripts/application.js');
+                savePath;
   exec(command, function (error, stdout, stderr) {
     if(stdout) console.log(stdout);
     if(stderr) console.log(stderr);
     if (error) throw new Error(error);
+    message.fileCreated(savePath);
     event.emit('reload', true);
   });
-
 }
 
 function watch() {
