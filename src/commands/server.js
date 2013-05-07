@@ -28,7 +28,7 @@ module.exports = function(program, test) {
   mimeTypes = {"html": "text/html", "jpeg": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "js": "text/javascript", "css": "text/css"};
 
   precompile(rootify('templates'), rootify('templates.js'), function() {
-    locales().then(createIndex).then(build).then(start_server).then(watch);
+    locales().then(createIndex).then(build).then(concatCss).then(start_server).then(watch);
   });
 };
 
@@ -116,6 +116,19 @@ function createIndex() {
   );
 }
 
+function concatCss() {
+  savePath = rootify('assets/application.css');
+  var out = config.css.map(function(cssFile){
+    filePath = './stylesheets/'+cssFile+'.css'
+    return fs.readFileSync(filePath, 'utf-8');
+  });
+  return fsp.createFile(savePath).then(function() {
+    return fsp.writeFile(savePath, out.join('\n')).then(function() {
+      message.fileCreated(savePath);
+    }, fsp.error);
+  }, fsp.error);
+}
+
 function locales() {
   savePath = rootify('config/locales.js');
   return fsp.readdir(rootify('config/locales')).then(function(locales) {
@@ -155,7 +168,7 @@ function watch() {
           if (curr.mtime > prev.mtime) {
             message.notify("-> Build: generate application.js");
             precompile(rootify('templates'), rootify('templates.js'), function() {
-              locales().then(createIndex).then(build);
+              locales().then(createIndex).then(build).then(concatCss);
             });
           }
         });
