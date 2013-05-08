@@ -164,7 +164,7 @@ function build() {
 function watch() {
   if(init){
     findit.find(root, function (file) {
-      if(file != rootify('index.js') && file != rootify('templates.js') && file != rootify('javascripts/application.js')){
+      if(file != rootify('index.js') && file != rootify('templates.js') && file != rootify('assets/application.js' && file != rootify('assets/application.css'))){
         fs.watchFile(file, { persistent: true, interval: 100 }, function (curr, prev) {
           if (curr.mtime > prev.mtime) {
             message.notify("-> Build: generate application.js");
