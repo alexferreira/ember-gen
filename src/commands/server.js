@@ -9,7 +9,7 @@ var template = require('../util/template');
 var inflector = require('../util/inflector');
 var walk = require('walk').walkSync;
 var precompile = require('../util/precompile');
-var findit = require('findit');
+var gaze = require('gaze');
 var YAML = require('yamljs');
 var EventEmitter = require('events').EventEmitter;
 var event = new EventEmitter();
@@ -163,17 +163,17 @@ function build() {
 
 function watch() {
   if(init){
-    findit.find(root, function (file) {
-      if(!file.match(/assets/g) && file != rootify('index.js') && file != rootify('templates.js') && file != rootify('config/locales.js')){
-        fs.watchFile(file, { persistent: true, interval: 100 }, function (curr, prev) {
-          if (curr.mtime > prev.mtime) {
-            message.notify("-> Build: generate application.js");
-            precompile(rootify('templates'), rootify('templates.js'), function() {
-              locales().then(createIndex).then(concatCss).then(build)
-            });
-          }
-        });
-      }
+    gaze(['**', '!assets/*', '!index.js', '!templates.js', '!config/locales.js'], function(err, watcher) {
+      this.on('all', function(event, filepath) {
+          message.notify("-> Build: generate application.js");
+          precompile(rootify('templates'), rootify('templates.js'), function() {
+            locales().then(createIndex).then(concatCss).then(build)
+          });
+      });
+      
+      this.on('error', function(err) {
+        console.log(err);
+      });
     });
   }
 }
