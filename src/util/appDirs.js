@@ -1,4 +1,5 @@
 module.exports = [
+  'assets',
   'config',
   'config/locales',
   'controllers',
