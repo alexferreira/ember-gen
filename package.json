@@ -45,9 +45,9 @@
     "rsvp-that-works": "1.2.0",
     "browserbuild": "https://github.com/alexferreira/browserbuild/tarball/master",
     "fs-extra": "0.6.0",
-    "uglify-js": "2.2.5",
-    "findit":"0.1.2",
-    "yamljs": "0.1.4"
+    "uglify-js": "2.3.2",
+    "yamljs": "0.1.4",
+    "gaze": "0.3.4"
   },
   "devDependencies": {
     "mocha": "1.9.0",
