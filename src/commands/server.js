@@ -28,7 +28,7 @@ module.exports = function(program, test) {
   mimeTypes = {"html": "text/html", "jpeg": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "js": "text/javascript", "css": "text/css"};
 
   precompile(rootify('templates'), rootify('templates.js'), function() {
-    locales().then(createIndex).then(build).then(concatCss).then(start_server).then(watch);
+    locales().then(createIndex).then(concatCss).then(build).then(start_server).then(watch);
   });
 };
 
@@ -150,7 +150,7 @@ function files(file){
 function build() {
   var savePath = rootify('assets/application.js');
   var command = __dirname + '/../../node_modules/browserbuild/bin/browserbuild ' +
-                "-m index -b " + root + "/ `find "+ root + " -name '*.js'` > " +
+                "-m index -b " + root + "/ `find "+ root + " -name '*.js' -not -path './assets/*'` > " +
                 savePath;
   exec(command, function (error, stdout, stderr) {
     if(stdout) console.log(stdout);
@@ -164,12 +164,12 @@ function build() {
 function watch() {
   if(init){
     findit.find(root, function (file) {
-      if(file != rootify('index.js') && file != rootify('templates.js') && file != rootify('assets/application.js' && file != rootify('assets/application.css'))){
+      if(!file.match(/assets/g) && file != rootify('index.js') && file != rootify('templates.js') && file != rootify('config/locales.js')){
         fs.watchFile(file, { persistent: true, interval: 100 }, function (curr, prev) {
           if (curr.mtime > prev.mtime) {
             message.notify("-> Build: generate application.js");
             precompile(rootify('templates'), rootify('templates.js'), function() {
-              locales().then(createIndex).then(build).then(concatCss);
+              locales().then(createIndex).then(concatCss).then(build)
             });
           }
         });
