@@ -1,10 +1,12 @@
 var exec = require('child_process').exec;
 var fs = require('fs');
+var fsp = require('../util/fs-promised');
 var message = require('../util/message');
 var walk = require('walk').walkSync;
 var appDirs = require('../util/appDirs');
 var template = require('../util/template');
 var inflector = require('../util/inflector');
+var cleanCSS = require('clean-css');
 var config,root;
 
 module.exports = function(program) {
@@ -12,7 +14,7 @@ module.exports = function(program) {
   root = config.app.appDir;
   vendor = config.vendor;
   checkApplication();
-  createIndex().then(build);
+  createIndex().then(buildCss).then(build);
 };
 
 function checkApplication(){
@@ -67,12 +69,30 @@ function createIndex() {
   );
 }
 
+function buildCss() {
+  var cssUncompress, minimized;
+  savePath = rootify('assets/application.min.css');
+  var out = config.css.map(function(cssFile){
+    filePath = './stylesheets/'+cssFile+'.css'
+    return fs.readFileSync(filePath, 'utf-8');
+  });
+  message.notify("-> Minify: create application.min.css");
+  cssUncompress = out.join('\n');
+  minimized = cleanCSS.process(cssUncompress, {keepSpecialComments: 0, keepBreaks: false, removeEmpty: false});
+
+  return fsp.createFile(savePath).then(function() {
+    return fsp.writeFile(savePath, minimized).then(function() {
+      message.fileCreated(savePath);
+    }, fsp.error);
+  }, fsp.error);
+}
+
 function build() {
   var savePath = rootify('assets/application.min.js');
   var command = __dirname + '/../../node_modules/browserbuild/bin/browserbuild ' +
                 "-c -m index -b " + root + "/ `find "+ root + " -name '*.js' -not -path './assets/*'` > " +
                 savePath;
-  message.notify("-> Minify: create application.min.js");                
+  message.notify("-> Minify: create application.min.js");
   exec(command, function (error, stdout, stderr) {
     if(stdout) console.log(stdout);
     if(stderr) console.log(stderr);
