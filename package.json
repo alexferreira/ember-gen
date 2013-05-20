@@ -46,6 +46,7 @@
     "browserbuild": "https://github.com/alexferreira/browserbuild/tarball/master",
     "fs-extra": "0.6.0",
     "uglify-js": "2.3.2",
+    "clean-css": "1.0.3",
     "yamljs": "0.1.4",
     "gaze": "0.3.4"
   },
