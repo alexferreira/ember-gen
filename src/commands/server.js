@@ -25,7 +25,7 @@ module.exports = function(program, test) {
   root = config.app.appDir;
   vendor = config.vendor;
 
-  mimeTypes = {"html": "text/html", "jpeg": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "js": "text/javascript", "css": "text/css"};
+  mimeTypes = {"html": "text/html", "jpeg": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "js": "text/javascript", "css": "text/css", "woff": "application/font-woff"};
 
   precompile(rootify('templates'), rootify('templates.js'), function() {
     locales().then(createIndex).then(concatCss).then(build).then(start_server).then(watch);
