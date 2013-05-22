@@ -33,5 +33,6 @@ var {{namespace}} = window.{{namespace}} = require('./app');
 {{namespace}}.Store = require('./config/store');
 {{#each modules}}
 {{namespace}}.{{objectName}} = require('./{{path}}');{{/each}}
-require('./config/routes');
 require('./config/locales');
+require('./config/routes');
+
