@@ -27,6 +27,7 @@ require('./templates');
 {{#each helpers}}
 require('./{{path}}');{{/each}}
 require('./functions');
+require('./config/init');
 
 var {{namespace}} = window.{{namespace}} = require('./app');
 

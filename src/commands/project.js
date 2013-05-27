@@ -18,6 +18,7 @@ module.exports = function(path, env) {
     'index_'+template+'.html',
     'app.js',
     'functions.js',
+    'config/init.js',
     'config/store.js',
     'config/routes.js',
     'config/locales.js',
