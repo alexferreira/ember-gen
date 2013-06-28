@@ -8,7 +8,5 @@ module.exports = [
   'templates',
   'helpers',
   'views',
-  'mixins',
-  'javascripts',
-  'images'
+  'mixins'
 ];
