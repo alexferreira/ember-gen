@@ -22,13 +22,14 @@ module.exports = function(program, test) {
   config = require('../util/config')();
   port = env.port;
   init = env.init;
+  watch = env.watch;
   root = config.app.appDir;
   vendor = config.vendor;
 
   mimeTypes = {"html": "text/html", "jpeg": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "js": "text/javascript", "css": "text/css", "woff": "application/font-woff"};
 
   precompile(rootify('templates'), rootify('templates.js'), function() {
-    locales().then(createIndex).then(concatCss).then(build).then(start_server).then(watch);
+    locales().then(createIndex).then(concatCss).then(build).then(start_server).then(watch_files);
   });
 };
 
@@ -161,7 +162,7 @@ function build() {
   });
 }
 
-function watch() {
+function watch_files() {
   if(init){
     gaze(['**', '!assets/*', '!index.js', '!templates.js', '!config/locales.js'], function(err, watcher) {
       this.on('all', function(event, filepath) {

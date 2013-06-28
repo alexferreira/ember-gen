@@ -25,6 +25,7 @@ program
   .usage(' ')
   .option('-p, --port <port>', doc['server.port'], Number, 3000)
   .option('-n, --no-init', doc['server.noInit'])
+  .option('-w, --no-watch', doc['server.noWatch'])
   .action(function() { server.apply(null, arguments);  });
 
 program
