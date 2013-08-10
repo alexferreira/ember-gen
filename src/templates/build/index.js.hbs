@@ -24,13 +24,13 @@
 }, false);{{/if}}{{#each vendors}}
 require('./{{path}}');{{/each}}
 require('./templates');
-{{#each helpers}}
-require('./{{path}}');{{/each}}
 require('./functions');
 require('./config/init');
 
 var {{namespace}} = window.{{namespace}} = require('./app');
 
+{{#each helpers}}
+require('./{{path}}');{{/each}}
 {{namespace}}.Store = require('./config/store');
 {{#each modules}}
 {{namespace}}.{{objectName}} = require('./{{path}}');{{/each}}

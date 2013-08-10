@@ -1,7 +1,5 @@
 var walk = require('walk').walk;
-var fs = require('fs');
-// var jsdom = require('jsdom');
-var template = require('../util/template');
+var fs = require('./fs');
 var message = require('../util/message');
 var precompile = require('../../packages/ember-template-compiler').precompile;
 
@@ -9,13 +7,9 @@ module.exports = function(source, savePath, callback) {
   callback = callback || function(){};
   getTemplates(source, function(templates) {
     compile(templates, function(src) {
-      template.write('precompile/templates.js', savePath, {
-        templates: templates
-      }, true).then(function() {
-        callback();
-      }, function(err) {
-        console.log(err);
-      });
+      var locals = { templates: templates };
+      fs.writeTemplate('precompile', 'templates.js', locals, savePath, 'force');
+      callback();
     });
   });
 };
