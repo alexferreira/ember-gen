@@ -112,7 +112,7 @@ function createIndex() {
   return template.write(
     'build/index.js',
     rootify('index.js'),
-    {modules: modules, helpers: helpers, namespace: config.app.namespace, reload: true, vendors: vendors},
+    {modules: modules, helpers: helpers, namespace: config.app.namespace, reload: init, vendors: vendors},
     true
   );
 }
@@ -163,7 +163,7 @@ function build() {
 }
 
 function watch_files() {
-  if(init){
+  if(watch){
     gaze(['**', '!assets/*', '!index.js', '!templates.js', '!config/locales.js'], function(err, watcher) {
       this.on('all', function(event, filepath) {
           message.notify("-> Build: generate application.js");
