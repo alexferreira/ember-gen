@@ -39,8 +39,7 @@ program
   .description( doc['build'] )
   .usage(' ')
   .action(function() { build(program); })
-  .option('-m, --minify', doc['build.minify'])
-  .option('-w, --watch', doc['build.watch'])
+  .option('-gz, --gzip', doc['build.watch'])
 
 program
   .command('generate|g')
