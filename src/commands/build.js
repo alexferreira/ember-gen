@@ -45,6 +45,7 @@ function createIndex() {
         var path = unroot(dir + '/' + stats.name).replace(/\.js$/, '');
         if (dirName == 'assets') return;
         if (dirName == 'vendor') return;
+        if (dirName == 'test') return;
         if (dirName == 'helpers') {
           console.log();
           helpers.push({path: path});
