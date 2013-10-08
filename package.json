@@ -48,7 +48,7 @@
     "uglify-js": "2.3.2",
     "clean-css": "1.0.3",
     "yamljs": "0.1.4",
-    "gaze": "0.3.4"
+    "gaze": "0.4.2"
   },
   "devDependencies": {
     "mocha": "1.9.0",
