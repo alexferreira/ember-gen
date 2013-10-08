@@ -14,7 +14,7 @@ module.exports = function(program) {
   root = config.app.appDir;
   vendor = config.vendor;
   checkApplication();
-  createIndex().then(buildCss).then(build);
+  createVendor().then(createIndex).then(buildCss).then(buildVendor).then(build);
 };
 
 function checkApplication(){
@@ -27,14 +27,24 @@ function checkApplication(){
   return;
 }
 
-function createIndex() {
-  var modules = [];
-  var helpers = [];
+function createVendor() {
   var vendors = [];
 
   vendor.forEach(function(file) {
-    vendors.push({path: 'vendor/'+file});
+    vendors.push({path: file});
   }); 
+
+  return template.write(
+    'build/vendors.js',
+    rootify('vendor/index.js'),
+    {vendors: vendors},
+    true
+  );
+}
+
+function createIndex() {
+  var modules = [];
+  var helpers = [];
   
   appDirs.forEach(function(dirName) {
     if (dirName == 'templates' || dirName == 'config') return;
@@ -65,7 +75,7 @@ function createIndex() {
   return template.write(
     'build/index.js',
     rootify('index.js'),
-    {modules: modules, helpers: helpers, namespace: config.app.namespace, reload: false, vendors: vendors},
+    {modules: modules, helpers: helpers, namespace: config.app.namespace, reload: false},
     true
   );
 }
@@ -88,17 +98,31 @@ function buildCss() {
   }, fsp.error);
 }
 
+function buildVendor() {
+  var savePath = rootify('assets/vendors.min.js');
+  var command = __dirname + '/../../node_modules/browserbuild/bin/browserbuild ' +
+                "-c -m index -b vendor/ `find vendor -name '*.js'` > " +
+                savePath;
+  message.notify("-> Minify: create vendor.min.js");
+  exec(command, function (error, stdout, stderr) {
+    if(stdout) console.log(stdout);
+    if(stderr) console.log(stderr);
+    if (error) throw new Error(error);
+    message.fileCreated(savePath);
+  });
+}
+
 function build() {
   var savePath = rootify('assets/application.min.js');
   var command = __dirname + '/../../node_modules/browserbuild/bin/browserbuild ' +
-                "-c -m index -b " + root + "/ `find "+ root + " -name '*.js' -not -path './assets/*'` > " +
+                "-c -m index -b " + root + "/ `find "+ root + " -name '*.js' -not -path './assets/*' -not -path './vendor/*'` > " +
                 savePath;
   message.notify("-> Minify: create application.min.js");
   exec(command, function (error, stdout, stderr) {
     if(stdout) console.log(stdout);
     if(stderr) console.log(stderr);
     if (error) throw new Error(error);
-    message.fileCreated("assets/application.min.js");
+    message.fileCreated(savePath);
   });
 }
 
