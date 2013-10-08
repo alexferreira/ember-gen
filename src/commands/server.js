@@ -29,7 +29,7 @@ module.exports = function(program, test) {
   mimeTypes = {"html": "text/html", "jpeg": "image/jpeg", "jpg": "image/jpeg", "png": "image/png", "js": "text/javascript", "css": "text/css", "woff": "application/font-woff"};
 
   precompile(rootify('templates'), rootify('templates.js'), function() {
-    locales().then(createIndex).then(concatCss).then(build).then(start_server).then(watch_files);
+    locales().then(createVendor).then(createIndex).then(concatCss).then(buildVendor).then(build).then(start_server).then(watch_files);
   });
 };
 
@@ -76,15 +76,25 @@ function server(){
   })
 }
 
-function createIndex() {
-  var modules = [];
-  var helpers = [];
+function createVendor() {
   var vendors = [];
 
   vendor.forEach(function(file) {
-    vendors.push({path: 'vendor/'+file});
+    vendors.push({path: file});
   }); 
-  
+
+  return template.write(
+    'build/vendors.js',
+    rootify('vendor/index.js'),
+    {vendors: vendors},
+    true
+  );
+}
+
+function createIndex() {
+  var modules = [];
+  var helpers = [];
+
   appDirs.forEach(function(dirName) {
     if (dirName == 'templates' || dirName == 'config') return;
     var dirPath = rootify(dirName);
@@ -113,7 +123,7 @@ function createIndex() {
   return template.write(
     'build/index.js',
     rootify('index.js'),
-    {modules: modules, helpers: helpers, namespace: config.app.namespace, reload: init, vendors: vendors},
+    {modules: modules, helpers: helpers, namespace: config.app.namespace, reload: init},
     true
   );
 }
@@ -149,10 +159,23 @@ function files(file){
   console.log(lists);
 };
 
+function buildVendor() {
+  var savePath = rootify('assets/vendors.js');
+  var command = __dirname + '/../../node_modules/browserbuild/bin/browserbuild ' +
+                "-m index -b vendor/ `find vendor -name '*.js'` > " +
+                savePath;
+  exec(command, function (error, stdout, stderr) {
+    if(stdout) console.log(stdout);
+    if(stderr) console.log(stderr);
+    if (error) throw new Error(error);
+    message.fileCreated(savePath);
+  });
+}
+
 function build() {
   var savePath = rootify('assets/application.js');
   var command = __dirname + '/../../node_modules/browserbuild/bin/browserbuild ' +
-                "-m index -b " + root + "/ `find "+ root + " -name '*.js' -not -path './assets/*'` > " +
+                "-m index -b " + root + "/ `find "+ root + " -name '*.js' -not -path './assets/*' -not -path './vendor/*'` > " +
                 savePath;
   exec(command, function (error, stdout, stderr) {
     if(stdout) console.log(stdout);
@@ -165,15 +188,16 @@ function build() {
 
 function watch_files() {
   if(watch){
-    gaze(['**', '!assets/*', '!index.js', '!templates.js', '!config/locales.js'], function(err, watcher) {
-      this.on('all', function(event, filepath) {
+    var jsPath = process.cwd()
+    gaze(['**', '!assets/*', '!index.js', '!vendor/index.js', '!templates.js', '!config/locales.js'], function(err, watcher) {
+      watcher.on('all', function(event, filepath) {
           message.notify("-> Build: generate application.js");
           precompile(rootify('templates'), rootify('templates.js'), function() {
-            locales().then(createIndex).then(concatCss).then(build)
+            locales().then(createVendor).then(createIndex).then(concatCss).then(buildVendor).then(build)
           });
       });
       
-      this.on('error', function(err) {
+      watcher.on('error', function(err) {
         console.log(err);
       });
     });
