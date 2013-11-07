@@ -49,12 +49,18 @@ function server(){
     var stats;
 
     req.url === "/" ?  fileName = index : fileName = "." + req.url;
-
+    // console.log(fileName.match(/assets/))
     if(fileName == './reload'){
       res.writeHead(200, {"Content-Type":"text/event-stream", "Cache-Control":"no-cache", "Connection":"keep-alive"});
       event.once('reload', function(data) {
         res.write("data: " + data + "\n\n");
       });
+    } else if(!fileName.match(/assets/)){
+        var mimeType = mimeTypes[path.extname(index).split(".")[1]];
+        res.writeHead(200, {'Content-Type': mimeType} );
+        var fileStream = fs.createReadStream(index);
+        fileStream.pipe(res);
+        return;
     } else {
       try {
         stats = fs.lstatSync(fileName);
@@ -71,7 +77,7 @@ function server(){
         var fileStream = fs.createReadStream(fileName);
         fileStream.pipe(res);
       }
-    } 
+    }
 
   })
 }
@@ -81,7 +87,7 @@ function createVendor() {
 
   vendor.forEach(function(file) {
     vendors.push({path: file});
-  }); 
+  });
 
   return template.write(
     'build/vendors.js',
@@ -196,7 +202,7 @@ function watch_files() {
             locales().then(createVendor).then(createIndex).then(concatCss).then(buildVendor).then(build)
           });
       });
-      
+
       watcher.on('error', function(err) {
         console.log(err);
       });
