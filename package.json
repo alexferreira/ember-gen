@@ -44,19 +44,18 @@
     "fleck": "0.5.1",
     "rsvp-that-works": "1.2.0",
     "browserbuild": "https://github.com/alexferreira/browserbuild/tarball/master",
-    "fs-extra": "0.6.0",
-    "uglify-js": "2.3.2",
-    "clean-css": "1.0.3",
+    "fs-extra": "0.8.1",
+    "uglify-js": "2.4.6",
+    "clean-css": "2.0.2",
     "yamljs": "0.1.4",
-    "gaze": "0.4.2",
+    "gaze": "0.4.3",
     "stylus": "~0.41.0",
     "underscore": "~1.5.2"
   },
   "devDependencies": {
     "mocha": "1.9.0",
     "should": "1.2.2",
-    "rimraf": "2.1.4",
-    "csso-stylus": "0.0.3"
+    "rimraf": "2.1.4"
   },
   "directories": {
     "test": "./test"
