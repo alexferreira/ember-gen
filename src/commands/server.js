@@ -228,43 +228,26 @@ function build() {
 }
 
 function watch_files() {
+  var jsPath   = process.cwd();
+
   if(watch){
-    var jsPath   = process.cwd()
-    gaze(['**', '!assets/*', '!index.js', '!vendor/index.js', '!templates.js', '!config/locales.js', '!stylesheets/*'], function(err, watcher) {
-      watcher.on('all', function(event, filepath) {
+    gaze(['**/*.js', 'stylesheets/**', 'vendor/*.js', '!index.js', '!templates.js', '!assets/**', '!config/locales.js'], function(err, watcher) {
+      this.remove('vendor/index.js')
+      this.on('all', function(event, filepath) {
+        if(!filepath.match(/vendor/) && !filepath.match(/stylesheets/)){
           message.notify("-> Build: generate application.js");
           precompile(rootify('templates'), rootify('templates.js'), function() {
             locales().then(createIndex).then(build)
           });
+        }else if(!!filepath.match(/vendor/) && (filepath.match(/vendor\/\index.js/) || [])[0] == undefined){
+          message.notify("-> Build: generate vendor.js");
+          createVendor().then(buildVendor)
+        }else if(filepath.match(/stylesheets/)){
+          message.notify("-> Build: generate application.css");
+          concatCss();
+        }
       });
-
-      watcher.on('error', function(err) {
-        console.log(err);
-      });
-    });
-
-    gaze(['stylesheets/**'], function(err, watcher) {
-      watcher.on('all', function(event, filepath) {
-          message.notify("-> Build: generate application.js");
-          precompile(rootify('templates'), rootify('templates.js'), function() {
-            concatCss()
-          });
-      });
-
-      watcher.on('error', function(err) {
-        console.log(err);
-      });
-    });
-
-    gaze(['vendors/**'], function(err, watcher) {
-      watcher.on('all', function(event, filepath) {
-          message.notify("-> Build: generate application.js");
-          precompile(rootify('templates'), rootify('templates.js'), function() {
-            createVendor().then(buildVendor)
-          });
-      });
-
-      watcher.on('error', function(err) {
+      this.on('error', function(err) {
         console.log(err);
       });
     });
