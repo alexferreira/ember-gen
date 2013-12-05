@@ -7,6 +7,8 @@ var appDirs = require('../util/appDirs');
 var template = require('../util/template');
 var inflector = require('../util/inflector');
 var cleanCSS = require('clean-css');
+var stylus = require('stylus');
+var _ = require('underscore');
 var config,root;
 
 module.exports = function(program) {
@@ -32,7 +34,7 @@ function createVendor() {
 
   vendor.forEach(function(file) {
     vendors.push({path: file});
-  }); 
+  });
 
   return template.write(
     'build/vendors.js',
@@ -45,7 +47,7 @@ function createVendor() {
 function createIndex() {
   var modules = [];
   var helpers = [];
-  
+
   appDirs.forEach(function(dirName) {
     if (dirName == 'templates' || dirName == 'config') return;
     var dirPath = rootify(dirName);
@@ -83,19 +85,31 @@ function createIndex() {
 function buildCss() {
   var cssUncompress, minimized;
   savePath = rootify('assets/application.min.css');
-  var out = config.css.map(function(cssFile){
-    filePath = './stylesheets/'+cssFile+'.css'
-    return fs.readFileSync(filePath, 'utf-8');
-  });
-  message.notify("-> Minify: create application.min.css");
-  cssUncompress = out.join('\n');
-  minimized = cleanCSS.process(cssUncompress, {keepSpecialComments: 0, keepBreaks: false, removeEmpty: false});
 
-  return fsp.createFile(savePath).then(function() {
-    return fsp.writeFile(savePath, minimized).then(function() {
-      message.fileCreated(savePath);
-    }, fsp.error);
-  }, fsp.error);
+  var out = config.stylesheets.map(function(cssFile){
+    filePath = './stylesheets/'+cssFile
+    return fs.readFileSync(filePath, 'utf-8');
+  }).join('\n')
+
+  stylesheetsPath = _.chain(config.stylesheets)
+                    .map(function(path){
+                      var path = _.initial(path.split('/'));
+                      return path == 0 ? './stylesheets' : './stylesheets/'+path.join('/');
+                    })
+                    .value()
+
+  return stylus(out)
+    .set('paths', stylesheetsPath)
+    .render(function(err, css){
+      if (err) throw err;
+      message.notify("-> Minify: create application.min.css");
+      minimized = cleanCSS.process(css, {keepSpecialComments: 0, keepBreaks: false, removeEmpty: false});
+      return fsp.createFile(savePath).then(function() {
+        return fsp.writeFile(savePath, minimized).then(function() {
+          message.fileCreated(savePath);
+        }, fsp.error);
+      }, fsp.error);
+    });
 }
 
 function buildVendor() {

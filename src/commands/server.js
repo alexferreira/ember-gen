@@ -15,6 +15,8 @@ var EventEmitter = require('events').EventEmitter;
 var event = new EventEmitter();
 var http = require("http");
 var path = require("path");
+var stylus = require('stylus');
+var _ = require('underscore');
 var config,root;
 
 module.exports = function(program, test) {
@@ -105,6 +107,7 @@ function createIndex() {
     if (dirName == 'templates' || dirName == 'config') return;
     var dirPath = rootify(dirName);
     var walker = walk(dirPath);
+    var name;
     walker.on('file', function(dir, stats, next) {
       if (stats.name.charAt(0) !== '.' && stats.name.match(/\.js$/)) {
         var path = unroot(dir + '/' + stats.name).replace(/\.js$/, '');
@@ -114,7 +117,19 @@ function createIndex() {
         if (dirName == 'helpers') {
           helpers.push({path: path});
         } else {
-          var name = inflector.objectify(path.replace(dirName, ''));
+          // console.log(path.match(/^models/))
+          // if(dirName == 'models'){
+          //   name = path.replace(dirName, '').substring(1).split('/')
+
+          //   newName = [];
+          //   name.forEach(function(str){
+          //     newName.push(inflector.objectify(str));
+          //   })
+          //   name = newName.join('.');
+          // } else {
+            name = inflector.objectify(path.replace(dirName, ''));
+          // }
+
           modules.push({
             namespace: config.app.namespace,
             objectName: name,
@@ -136,20 +151,35 @@ function createIndex() {
 
 function concatCss() {
   savePath = rootify('assets/application.css');
-  var out = config.css.map(function(cssFile){
-    filePath = './stylesheets/'+cssFile+'.css'
+
+  var out = config.stylesheets.map(function(cssFile){
+    filePath = './stylesheets/'+cssFile
     return fs.readFileSync(filePath, 'utf-8');
-  });
-  return fsp.createFile(savePath).then(function() {
-    return fsp.writeFile(savePath, out.join('\n')).then(function() {
-      message.fileCreated(savePath);
-    }, fsp.error);
-  }, fsp.error);
+  }).join('\n')
+
+  stylesheetsPath = _.chain(config.stylesheets)
+                    .map(function(path){
+                      var path = _.initial(path.split('/'));
+                      return path == 0 ? './stylesheets' : './stylesheets/'+path.join('/');
+                    })
+                    .value()
+
+  return stylus(out)
+    .set('paths', stylesheetsPath)
+    .render(function(err, css){
+      if (err) throw err;
+      return fsp.createFile(savePath).then(function() {
+        return fsp.writeFile(savePath, css).then(function() {
+          message.fileCreated(savePath);
+        }, fsp.error);
+      }, fsp.error);
+    });
 }
 
 function locales() {
   savePath = rootify('config/locales.js');
   return fsp.readdir(rootify('config/locales')).then(function(locales) {
+    locales = locales.filter(function(item){ return item.match(/.yml$/); });
     concatString = fsp.concat(locales)
     jsonObject = 'Ember.I18n.translations = '+JSON.stringify(YAML.parse(concatString), null, 2);
     return fsp.createFile(savePath).then(function() {
