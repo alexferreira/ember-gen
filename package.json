@@ -50,7 +50,8 @@
     "yamljs": "0.1.4",
     "gaze": "0.4.3",
     "stylus": "~0.41.0",
-    "underscore": "~1.5.2"
+    "underscore": "~1.5.2",
+    "fsmonitor": "~0.2.2"
   },
   "devDependencies": {
     "mocha": "1.9.0",

@@ -231,7 +231,7 @@ function watch_files() {
   var jsPath   = process.cwd();
 
   if(watch){
-    gaze(['**/*.js', 'stylesheets/**', 'vendor/*.js', '!index.js', '!templates.js', '!assets/**', '!config/locales.js'], function(err, watcher) {
+    gaze(['**/*.js', 'stylesheets/**', 'templates/**', 'vendor/*.js', '!index.js', '!templates.js', '!assets/**', '!config/locales.js'], function(err, watcher) {
       this.remove('vendor/index.js')
       this.on('all', function(event, filepath) {
         if(!filepath.match(/vendor/) && !filepath.match(/stylesheets/)){
