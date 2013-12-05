@@ -155,7 +155,7 @@ function concatCss() {
   var out = config.stylesheets.map(function(cssFile){
     filePath = './stylesheets/'+cssFile
     return fs.readFileSync(filePath, 'utf-8');
-  }).join('\n')
+  }).join('\n');
 
   stylesheetsPath = _.chain(config.stylesheets)
                     .map(function(path){
@@ -168,12 +168,16 @@ function concatCss() {
     .set('paths', stylesheetsPath)
     .render(function(err, css){
       if (err) throw err;
-      fs.unlinkSync(savePath)
-      return fsp.createFile(savePath).then(function() {
-        return fsp.writeFile(savePath, css).then(function() {
-          message.fileCreated(savePath);
+
+      fsp.exists(savePath).then(function(exist){
+        if(exist) return fs.unlinkSync(savePath)
+      }).then(function(path){
+        fsp.createFile(savePath).then(function() {
+          return fsp.writeFile(savePath, css).then(function() {
+            message.fileCreated(savePath);
+          }, fsp.error);
         }, fsp.error);
-      }, fsp.error);
+      });
     });
 }
 
@@ -225,12 +229,38 @@ function build() {
 
 function watch_files() {
   if(watch){
-    var jsPath = process.cwd()
-    gaze(['**', '!assets/*', '!index.js', '!vendor/index.js', '!templates.js', '!config/locales.js'], function(err, watcher) {
+    var jsPath   = process.cwd()
+    gaze(['**', '!assets/*', '!index.js', '!vendor/index.js', '!templates.js', '!config/locales.js', '!stylesheets/*'], function(err, watcher) {
       watcher.on('all', function(event, filepath) {
           message.notify("-> Build: generate application.js");
           precompile(rootify('templates'), rootify('templates.js'), function() {
-            locales().then(createVendor).then(createIndex).then(concatCss).then(buildVendor).then(build)
+            locales().then(createIndex).then(build)
+          });
+      });
+
+      watcher.on('error', function(err) {
+        console.log(err);
+      });
+    });
+
+    gaze(['stylesheets/**'], function(err, watcher) {
+      watcher.on('all', function(event, filepath) {
+          message.notify("-> Build: generate application.js");
+          precompile(rootify('templates'), rootify('templates.js'), function() {
+            concatCss()
+          });
+      });
+
+      watcher.on('error', function(err) {
+        console.log(err);
+      });
+    });
+
+    gaze(['vendors/**'], function(err, watcher) {
+      watcher.on('all', function(event, filepath) {
+          message.notify("-> Build: generate application.js");
+          precompile(rootify('templates'), rootify('templates.js'), function() {
+            createVendor().then(buildVendor)
           });
       });
 
