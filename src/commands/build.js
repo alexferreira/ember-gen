@@ -104,6 +104,7 @@ function buildCss() {
       if (err) throw err;
       message.notify("-> Minify: create application.min.css");
       minimized = cleanCSS.process(css, {keepSpecialComments: 0, keepBreaks: false, removeEmpty: false});
+      fs.unlinkSync(savePath)
       return fsp.createFile(savePath).then(function() {
         return fsp.writeFile(savePath, minimized).then(function() {
           message.fileCreated(savePath);
