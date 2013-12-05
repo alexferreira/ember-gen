@@ -104,12 +104,16 @@ function buildCss() {
       if (err) throw err;
       message.notify("-> Minify: create application.min.css");
       minimized = cleanCSS.process(css, {keepSpecialComments: 0, keepBreaks: false, removeEmpty: false});
-      fs.unlinkSync(savePath)
-      return fsp.createFile(savePath).then(function() {
-        return fsp.writeFile(savePath, minimized).then(function() {
-          message.fileCreated(savePath);
+
+      fsp.exists(savePath).then(function(exist){
+        if(exist) return fs.unlinkSync(savePath)
+      }).then(function(path){
+        fsp.createFile(savePath).then(function() {
+          return fsp.writeFile(savePath, css).then(function() {
+            message.fileCreated(savePath);
+          }, fsp.error);
         }, fsp.error);
-      }, fsp.error);
+      });
     });
 }
 
