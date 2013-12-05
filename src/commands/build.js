@@ -109,7 +109,7 @@ function buildCss() {
         if(exist) return fs.unlinkSync(savePath)
       }).then(function(path){
         fsp.createFile(savePath).then(function() {
-          return fsp.writeFile(savePath, css).then(function() {
+          return fsp.writeFile(savePath, minimized).then(function() {
             message.fileCreated(savePath);
           }, fsp.error);
         }, fsp.error);
