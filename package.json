@@ -17,9 +17,9 @@
     "type": "git",
     "url": "https://github.com/alexferreira/ember-gen.git"
   },
-  "bugs": { 
-    "email" : "dev@alexferreira.eti.br"
-  , "url" : "https://github.com/alexferreira/ember-gen/issues"
+  "bugs": {
+    "email": "dev@alexferreira.eti.br",
+    "url": "https://github.com/alexferreira/ember-gen/issues"
   },
   "keywords": [
     "ember",
@@ -36,7 +36,7 @@
     "front-end",
     "bootstrap"
   ],
-  "dependencies" : {
+  "dependencies": {
     "commander": "https://github.com/alexferreira/commander.js/tarball/master",
     "cli-color": "0.2.2",
     "walk": "2.2.1",
@@ -48,12 +48,15 @@
     "uglify-js": "2.3.2",
     "clean-css": "1.0.3",
     "yamljs": "0.1.4",
-    "gaze": "0.4.2"
+    "gaze": "0.4.2",
+    "stylus": "~0.41.0",
+    "underscore": "~1.5.2"
   },
   "devDependencies": {
     "mocha": "1.9.0",
     "should": "1.2.2",
-    "rimraf": "2.1.4"
+    "rimraf": "2.1.4",
+    "csso-stylus": "0.0.3"
   },
   "directories": {
     "test": "./test"
