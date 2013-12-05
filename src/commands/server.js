@@ -168,6 +168,7 @@ function concatCss() {
     .set('paths', stylesheetsPath)
     .render(function(err, css){
       if (err) throw err;
+      fs.unlinkSync(savePath)
       return fsp.createFile(savePath).then(function() {
         return fsp.writeFile(savePath, css).then(function() {
           message.fileCreated(savePath);
@@ -226,6 +227,7 @@ function watch_files() {
   if(watch){
     var jsPath = process.cwd()
     gaze(['**', '!assets/*', '!index.js', '!vendor/index.js', '!templates.js', '!config/locales.js'], function(err, watcher) {
+      console.log(err, watcher)
       watcher.on('all', function(event, filepath) {
           message.notify("-> Build: generate application.js");
           precompile(rootify('templates'), rootify('templates.js'), function() {
