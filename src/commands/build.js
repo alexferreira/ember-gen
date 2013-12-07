@@ -6,7 +6,7 @@ var walk = require('walk').walkSync;
 var appDirs = require('../util/appDirs');
 var template = require('../util/template');
 var inflector = require('../util/inflector');
-var cleanCSS = require('clean-css');
+var CleanCSS = require('clean-css');
 var stylus = require('stylus');
 var _ = require('underscore');
 var config,root;
@@ -89,7 +89,7 @@ function buildCss() {
   var out = config.stylesheets.map(function(cssFile){
     filePath = './stylesheets/'+cssFile
     return fs.readFileSync(filePath, 'utf-8');
-  }).join('\n')
+  }).join('')
 
   stylesheetsPath = _.chain(config.stylesheets)
                     .map(function(path){
@@ -98,13 +98,13 @@ function buildCss() {
                     })
                     .value()
 
+
   return stylus(out)
     .set('paths', stylesheetsPath)
     .render(function(err, css){
       if (err) throw err;
       message.notify("-> Minify: create application.min.css");
-      minimized = cleanCSS.process(css, {keepSpecialComments: 0, keepBreaks: false, removeEmpty: false});
-
+      var minimized = new CleanCSS({keepSpecialComments: 0, keepBreaks: false, removeEmpty: false}).minify(css)
       fsp.exists(savePath).then(function(exist){
         if(exist) return fs.unlinkSync(savePath)
       }).then(function(path){
