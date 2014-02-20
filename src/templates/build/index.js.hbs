@@ -3,7 +3,7 @@
 
 {{#if reload}}window.addEventListener("load", function() {
   if (!!window.EventSource) {
-    source = new EventSource("reload");
+    source = new EventSource("/reload");
     source.addEventListener("message", function(event) {
       if(event.data == "true") location.reload();
     }, false);
