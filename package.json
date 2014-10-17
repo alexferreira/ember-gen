@@ -8,7 +8,7 @@
   "description": "Ember Generator Applications -----------",
   "readmeFilename": "README.md",
   "bin": {
-    "ember": "./bin/ember"
+    "ember-gen": "./bin/ember"
   },
   "scripts": {
     "test": "node_modules/.bin/mocha --require should --reporter spec --ui bdd --growl $(find test -name \"*.spec.js\")"
